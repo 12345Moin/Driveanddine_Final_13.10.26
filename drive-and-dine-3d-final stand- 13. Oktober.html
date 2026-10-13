@@ -1,0 +1,2688 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Drive &amp; Dine, 3D Modell, Farmsen/Berne</title>
+<style>
+  :root{
+    --ink:#eef1f0; --panel:rgba(16,20,19,.82); --line:rgba(255,255,255,.14);
+    --brand:#9fd08c; --accent:#e8b45a;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%; overflow:hidden; background:#0e1214;}
+  body{font-family:"Avenir Next","Segoe UI",system-ui,sans-serif; color:var(--ink);}
+  #c{position:fixed; inset:0; width:100%; height:100%; display:block; touch-action:none;}
+  .panel{position:fixed; backdrop-filter:blur(8px); background:var(--panel); border:1px solid var(--line); border-radius:10px;}
+  #head{top:12px; left:12px; padding:10px 14px; max-width:min(430px, calc(100vw - 24px));}
+  #head h1{font-size:17px; letter-spacing:.04em; font-weight:700;}
+  #head h1 span{color:var(--brand);}
+  #head p{font-size:11.5px; opacity:.85; margin-top:2px;}
+  #bar{top:12px; right:12px; display:flex; flex-direction:column; align-items:flex-end; gap:6px; padding:6px;
+       max-width:calc(100vw - 470px);}
+  #bar .grp{display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end;}
+  #bar .grp + .grp{padding-top:6px; border-top:1px solid var(--line); width:100%;}
+  #bar button{
+    font:600 12.5px/1 inherit; color:var(--ink); background:rgba(255,255,255,.07);
+    border:1px solid var(--line); border-radius:7px; padding:9px 12px; cursor:pointer; white-space:nowrap;
+  }
+  #bar button.on{background:var(--brand); color:#12210f; border-color:transparent;}
+  #bar .grp.tg button.on{background:var(--accent); color:#2a1d08;}
+  #plan{left:50%; top:118px; transform:translateX(-50%); width:min(1200px, calc(100vw - 24px));
+        max-height:calc(100vh - 130px); overflow:auto; padding:14px 16px; display:none; z-index:5;}
+  #plan .ph{display:flex; align-items:center; gap:14px; margin-bottom:10px;}
+  #plan h2{font-size:14px; color:var(--brand); letter-spacing:.04em;}
+  #plan a{color:var(--accent); font-size:12.5px; text-decoration:none; margin-left:auto;}
+  #plan .cl{cursor:pointer; opacity:.75; font-size:16px;}
+  #plan .pb{display:flex; gap:18px; align-items:flex-start;}
+  #planSvg{flex:1 1 auto; min-width:0;}
+  #planSvg svg{width:100%; height:auto; max-height:calc(100vh - 205px); display:block; border-radius:6px;}
+  #planTab{flex:0 0 300px; font-size:12px;}
+  #planTab table{width:100%; border-collapse:collapse;}
+  #planTab td{padding:4px 0; border-bottom:1px solid var(--line); vertical-align:top;}
+  #planTab td.v{text-align:right; white-space:nowrap; color:var(--accent); font-weight:600; padding-left:10px;}
+  #planTab tr.h td{padding-top:11px; font-size:10.5px; letter-spacing:.08em; opacity:.65; border-bottom:none; font-weight:700;}
+  #planTab .meter{height:6px; background:rgba(255,255,255,.12); border-radius:3px; overflow:hidden; margin:12px 0 4px;}
+  #planTab .meter i{display:block; height:100%; background:var(--brand);}
+  #planTab .mnote{font-size:11px; opacity:.8;}
+  #legend{left:12px; bottom:12px; padding:10px 12px; font-size:12px; max-width:235px;}
+  #legend h2{font-size:11px; font-weight:700; letter-spacing:.08em; opacity:.7; margin-bottom:7px;}
+  #legend .row{display:flex; align-items:center; gap:8px; margin:4px 0;}
+  #legend .sw{width:13px; height:13px; border-radius:3px; flex:0 0 auto; border:1px solid rgba(255,255,255,.25);}
+  #info{right:12px; bottom:12px; padding:12px 14px; font-size:12px; max-width:310px; line-height:1.5; display:none;}
+  #info h2{font-size:13px; margin-bottom:6px; color:var(--brand);}
+  #info b{color:var(--accent); font-weight:600;}
+  #info .cl{position:absolute; top:6px; right:10px; cursor:pointer; opacity:.7; font-size:15px;}
+  #help{left:50%; bottom:14px; transform:translateX(-50%); padding:7px 14px; font-size:12px; opacity:.92; white-space:nowrap;}
+  #joy{position:fixed; left:22px; bottom:86px; width:110px; height:110px; border-radius:50%;
+       background:rgba(255,255,255,.06); border:1px solid var(--line); display:none; touch-action:none;}
+  #knob{position:absolute; left:35px; top:35px; width:40px; height:40px; border-radius:50%;
+        background:rgba(255,255,255,.28);}
+  @media (max-width:860px){
+    #plan .pb{flex-direction:column;}
+    #planTab{flex:none; width:100%;}
+  }
+  @media (max-width:700px){
+    #legend{display:none;}
+    #head p{display:none;}
+    #head h1{font-size:15px;}
+    #bar{left:12px; right:12px; top:54px; max-width:none; align-items:stretch;}
+    #bar .grp{flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; scrollbar-width:none;}
+    #bar .grp::-webkit-scrollbar{display:none;}
+    #bar button{padding:8px 10px; font-size:12px;}
+    #plan{top:150px; max-height:calc(100vh - 162px);}
+    #planSvg svg{max-height:none;}
+    #help{white-space:normal; width:calc(100vw - 24px); text-align:center; font-size:11px;}
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<div class="panel" id="head">
+  <h1>DRIVE <span>&amp;</span> DINE</h1>
+  <p>Restaurant &amp; Café mit Drive-in, Friedrich-Ebert-Damm, Farmsen/Berne. Flurstück 4893, ca. 1.961 m².</p>
+</div>
+
+<div class="panel" id="bar">
+  <div class="grp">
+    <button id="vPersp" class="on">Perspektive</button>
+    <button id="vAerial">Vogelperspektive</button>
+    <button id="vAccess">Zufahrt</button>
+    <button id="vContext">Umgebung</button>
+    <button id="bWalk">Rundgang</button>
+    <button id="bInside">Innenräume</button>
+  </div>
+  <div class="grp tg">
+    <button id="bPlan">Maße</button>
+    <button id="bBound">Grenze</button>
+    <button id="bWays">Wege</button>
+    <button id="bLabels" class="on">Labels</button>
+    <button id="bLight">Tageslicht</button>
+    <button id="bInfo">Eckdaten</button>
+  </div>
+</div>
+
+<div class="panel" id="plan">
+  <div class="ph"><h2>Maße und Flächen je Einheit</h2><a id="planDl" download="drive-and-dine-massplan.svg">Maßplan herunterladen ↓</a><span class="cl" id="planClose">✕</span></div>
+  <div class="pb"><div id="planSvg"></div><div id="planTab"></div></div>
+</div>
+
+<div class="panel" id="legend">
+  <h2>LEGENDE</h2>
+  <div class="row"><div class="sw" style="background:#7a5348"></div>Restaurant "Flat Iron", 1 Geschoss</div>
+  <div class="row"><div class="sw" style="background:#3d4c56"></div>Café "Espresso House", 2 Geschosse</div>
+  <div class="row"><div class="sw" style="background:#e8b45a"></div>Drive-in-Spur</div>
+  <div class="row"><div class="sw" style="background:#c9ccce"></div>Zufahrt &amp; Parkplätze</div>
+  <div class="row"><div class="sw" style="background:#49c26e"></div>E-Ladesäulen</div>
+  <div class="row"><div class="sw" style="background:#6fb0e0"></div>Fahrradstellplätze</div>
+  <div class="row"><div class="sw" style="background:#4d7a3a"></div>Grünfläche &amp; Bäume</div>
+  <div class="row"><div class="sw" style="background:#20305c"></div>Photovoltaik / Gründach</div>
+  <div class="row"><div class="sw" style="background:#686c70"></div>Nachbarbebauung (Bestand)</div>
+</div>
+
+<div class="panel" id="info">
+  <span class="cl" id="infoClose">✕</span>
+  <h2>Baurechtliche Eckdaten</h2>
+  Grundstück: <b>ca. 1.961 m²</b> (Kerngebiet MK III)<br>
+  GRZ 0,8: max. <b>1.568,8 m²</b> versiegelbar<br>
+  GFZ 2,4, max. <b>3 Vollgeschosse</b><br><br>
+  <h2>So umgesetzt im Modell</h2>
+  Gebäude-Grundfläche: ca. 412 m² (GRZ 0,21), von den Grenzen abgerückt<br>
+  Versiegelt gesamt: ca. 1.535 m² (Reserve ca. 34 m²), Grünfläche: ca. 426 m² (Minimum wären 392 m²)<br>
+  Geschossfläche: ca. 568 m² (GFZ 0,29)<br>
+  Café: 2 Vollgeschosse, EG Bestellung, OG Lounge, Drive-in-Ausgabe im Erker an der Rückseite<br>
+  Restaurant: 1 Vollgeschoss, Bar, offene Küche mit Ausgabetheke, ca. 65 Plätze<br>
+  Alle Flächen je Einheit: Schalter „Maße“<br>
+  Drive-in: zweispurige Einfahrt rechts neben dem Café (Spur 1 Drive-in mit Bestellterminal, Spur 2 Vorbeifahrt zum Parkplatz), Bogen ums Café zum Ausgabefenster an der Rückseite, Rückweg hinter den Gebäuden, Ausfahrt östlich zur Hauptstraße<br>
+  Parken: <b>12 E-Ladeplätze</b> (6 hinter dem Restaurant, 6 in der hinteren Reihe), <b>11 Pkw-Stellplätze</b> hinter dem Café, Fahrgasse 6 m breit (Einbahn), überdachte Fahrradstation, Zufahrt über Spur 2 vom Friedrich-Ebert-Damm, Ausfahrt über die Ostspur<br>
+  Fußgänger: durchgehend 3 m breite Achse vom Flat Iron über den Zebrastreifen (nur über die Fahrgasse, nicht über die Drive-in-Spur) bis zur Fahrradstation<br>
+  Umgebung: Nachbarbebauung schematisch nach Flurstückskarte (4784, 4783, 1867, 4894, 5527/5528), Grundstück vereinfacht als Rechteck 48,5 × 40,4 m
+</div>
+
+<div class="panel" id="help">Ziehen: drehen · Scrollen/Pinch: zoomen · Shift+Ziehen: verschieben</div>
+<div id="joy"><div id="knob"></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script id="app">
+(function(){
+"use strict";
+var canvas = document.getElementById("c");
+var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.15;
+
+var scene = new THREE.Scene();
+scene.background = new THREE.Color(0x1a2340);
+scene.fog = new THREE.Fog(0x232c4c, 120, 360);
+
+var camera = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, .1, 800);
+
+/* ---------- Licht: blaue Stunde ---------- */
+var hemi = new THREE.HemisphereLight(0x35486e, 0x141a12, .5); scene.add(hemi);
+var sun = new THREE.DirectionalLight(0x9db4de, .4);
+sun.position.set(-45, 70, 55);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.camera.left = -75; sun.shadow.camera.right = 75;
+sun.shadow.camera.top = 75; sun.shadow.camera.bottom = -75;
+sun.shadow.camera.far = 260;
+sun.shadow.bias = -0.0006;
+scene.add(sun);
+var amb = new THREE.AmbientLight(0x223050, .35); scene.add(amb);
+var lamps = [];
+function warmLight(x, y, z, i, d, col){
+  var l = new THREE.PointLight(col || 0xffc078, i, d, 2);
+  l.position.set(x, y, z); scene.add(l); lamps.push({l:l, i:i});
+}
+warmLight(12, 3.2, -9, 1.1, 22);          /* Restaurant innen */
+warmLight(-8, 2.8, -5.5, .95, 17);        /* Cafe EG */
+warmLight(-8, 6.6, -5.5, .75, 16);        /* Cafe OG Lounge */
+warmLight(.5, 3, -6.5, .6, 11);           /* Durchgang zwischen den Gebaeuden */
+warmLight(-8, 3, 3.2, .85, 14);           /* Drive-in-Fenster */
+warmLight(11, 4, -18.5, .8, 24);          /* Terrasse */
+warmLight(2, 7, 10, .5, 40, 0xbfd4ff);    /* Parkplatz hinten, kuehl */
+warmLight(5.15, 3.2, 19.5, .45, 13, 0xffd9a0); /* Fahrradstation */
+warmLight(-20, 8, -26, .55, 40, 0xffd9a0);
+warmLight(24, 8, -26, .55, 40, 0xffd9a0);
+
+var skyTex = (function(){
+  var cv = document.createElement("canvas"); cv.width = 16; cv.height = 512;
+  var ctx = cv.getContext("2d");
+  var gr = ctx.createLinearGradient(0, 0, 0, 512);
+  gr.addColorStop(0, "#0a1026");
+  gr.addColorStop(.45, "#17244a");
+  gr.addColorStop(.62, "#2c3763");
+  gr.addColorStop(.72, "#54486e");
+  gr.addColorStop(.78, "#8a5f56");
+  gr.addColorStop(.83, "#3a3a55");
+  gr.addColorStop(1, "#141a2e");
+  ctx.fillStyle = gr; ctx.fillRect(0, 0, 16, 512);
+  return new THREE.CanvasTexture(cv);
+})();
+var skyMesh = new THREE.Mesh(new THREE.SphereGeometry(370, 24, 16),
+  new THREE.MeshBasicMaterial({map:skyTex, side:THREE.BackSide, fog:false}));
+scene.add(skyMesh);
+
+/* ---------- Texturen ---------- */
+function makeTex(w, h, fn, rx, ry){
+  var cv = document.createElement("canvas"); cv.width = w; cv.height = h;
+  fn(cv.getContext("2d"), w, h);
+  var t = new THREE.CanvasTexture(cv);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  if(rx) t.repeat.set(rx, ry || rx);
+  t.anisotropy = 4;
+  return t;
+}
+function noise(ctx, w, h, n, a){
+  for(var i=0;i<n;i++){
+    ctx.fillStyle = "rgba(" + (Math.random()<.5?"255,255,255":"0,0,0") + "," + (Math.random()*a) + ")";
+    ctx.fillRect(Math.random()*w, Math.random()*h, 2, 2);
+  }
+}
+var texBrick = makeTex(256, 256, function(ctx,w,h){
+  ctx.fillStyle = "#38302e"; ctx.fillRect(0,0,w,h);
+  var bh = 16, bw = 42;
+  for(var y=0; y<h; y+=bh){
+    var off = (y/bh)%2 ? bw/2 : 0;
+    for(var x=-bw; x<w; x+=bw){
+      var v = 38 + Math.random()*26;
+      ctx.fillStyle = "rgb(" + (v+14) + "," + (v+3) + "," + v + ")";
+      ctx.fillRect(x+off+1, y+1, bw-2, bh-2);
+    }
+  }
+  noise(ctx,w,h,900,.06);
+});
+var texAsphalt = makeTex(256, 256, function(ctx,w,h){
+  ctx.fillStyle = "#33373a"; ctx.fillRect(0,0,w,h);
+  noise(ctx,w,h,2600,.08);
+});
+var texLane = makeTex(256, 256, function(ctx,w,h){
+  ctx.fillStyle = "#3c4043"; ctx.fillRect(0,0,w,h);
+  noise(ctx,w,h,2200,.08);
+});
+var texGrass = makeTex(256, 256, function(ctx,w,h){
+  ctx.fillStyle = "#4a7538"; ctx.fillRect(0,0,w,h);
+  for(var i=0;i<2500;i++){
+    ctx.fillStyle = "rgba(" + (40+Math.random()*50) + "," + (95+Math.random()*60) + ",40,.5)";
+    ctx.fillRect(Math.random()*w, Math.random()*h, 2, 3);
+  }
+});
+/* Heller Granit: Platten 60 x 30 cm im Laeuferverband, feine Fugen, leichte Farbschwankung je Platte.
+   Eine Kachel der Textur = 1,2 x 1,2 m, Mapping in Weltkoordinaten (siehe pave), damit Fugen ueber alle Flaechen durchlaufen */
+var PAVE_S = 1.2;
+var texPaver = makeTex(1024, 1024, function(ctx,w,h){
+  var sw = w/2, sh = h/4, j = 5;
+  ctx.fillStyle = "#a9a59e"; ctx.fillRect(0,0,w,h);                 /* Fugenfarbe */
+  for(var row=0; row<4; row++){
+    var off = (row % 2) ? sw/2 : 0;
+    for(var col=-1; col<3; col++){
+      var x0 = col*sw + off, y0 = row*sh;
+      var v = Math.round((Math.random()-.5)*14);
+      ctx.fillStyle = "rgb(" + (214+v) + "," + (212+v) + "," + (206+v) + ")";
+      ctx.fillRect(x0 + j/2, y0 + j/2, sw - j, sh - j);
+      var gr = ctx.createLinearGradient(x0, y0, x0 + sw, y0 + sh);    /* leichte Wolkigkeit des Steins */
+      gr.addColorStop(0, "rgba(255,255,255," + (.03 + Math.random()*.04) + ")");
+      gr.addColorStop(1, "rgba(0,0,0," + (.02 + Math.random()*.04) + ")");
+      ctx.fillStyle = gr; ctx.fillRect(x0 + j/2, y0 + j/2, sw - j, sh - j);
+      ctx.fillStyle = "rgba(255,255,255,.18)";                        /* Kantenlicht */
+      ctx.fillRect(x0 + j/2, y0 + j/2, sw - j, 2);
+    }
+  }
+  for(var i=0; i<26000; i++){                                          /* Granitkorn */
+    var d = Math.random();
+    ctx.fillStyle = d < .45 ? "rgba(70,70,74,.20)" : (d < .8 ? "rgba(255,255,255,.22)" : "rgba(150,140,130,.22)");
+    ctx.fillRect(Math.random()*w, Math.random()*h, 1.6, 1.6);
+  }
+});
+texPaver.anisotropy = 8;
+var texConcrete = makeTex(256, 256, function(ctx,w,h){
+  ctx.fillStyle = "#a7a49f"; ctx.fillRect(0,0,w,h);
+  noise(ctx,w,h,1600,.06);
+});
+/* Blattwerk: kleine, gedrehte Blaetter in mehreren Gruentoenen, nahtlos kachelbar */
+var texLeaf = makeTex(256, 256, function(ctx,w,h){
+  ctx.fillStyle = "#30552a"; ctx.fillRect(0,0,w,h);
+  var cols = ["#22421a","#2c5221","#38622a","#447232","#52823a","#628e42","#749d4c"];
+  function leafAt(x, y, r, a, c){
+    for(var ox=-w; ox<=w; ox+=w){ for(var oy=-h; oy<=h; oy+=h){
+      ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(x+ox, y+oy, r, r*.5, a, 0, 7); ctx.fill();
+    }}
+  }
+  for(var i=0; i<2400; i++){
+    leafAt(Math.random()*w, Math.random()*h, 2.5+Math.random()*4.5, Math.random()*Math.PI,
+           cols[(Math.random()*cols.length)|0]);
+  }
+  for(var k=0; k<420; k++){ leafAt(Math.random()*w, Math.random()*h, 1.2+Math.random()*1.6, 0, "rgba(10,22,8,.6)"); }
+});
+/* Rinde: Laengsrisse, leicht grau-braun */
+var texBark = makeTex(64, 256, function(ctx,w,h){
+  ctx.fillStyle = "#4a3e33"; ctx.fillRect(0,0,w,h);
+  for(var i=0; i<90; i++){
+    var x = Math.random()*w, bw = 1 + Math.random()*2.5;
+    ctx.fillStyle = Math.random() < .55 ? "rgba(25,18,12,.45)" : "rgba(140,125,105,.25)";
+    ctx.fillRect(x, 0, bw, h);
+  }
+  for(var j=0; j<140; j++){
+    ctx.fillStyle = "rgba(20,14,10,.4)";
+    ctx.fillRect(Math.random()*w, Math.random()*h, 3 + Math.random()*6, 1);
+  }
+}, 2, 1);
+var texGreenRoof = makeTex(256, 256, function(ctx,w,h){
+  ctx.fillStyle = "#5d7c3f"; ctx.fillRect(0,0,w,h);
+  for(var i=0;i<1800;i++){
+    ctx.fillStyle = "rgba(" + (60+Math.random()*80) + "," + (100+Math.random()*70) + "," + (30+Math.random()*40) + ",.6)";
+    ctx.beginPath(); ctx.arc(Math.random()*w, Math.random()*h, 2+Math.random()*3, 0, 7); ctx.fill();
+  }
+});
+function signTex(text, bg, fg, fs){
+  return makeTex(1024, 200, function(ctx,w,h){
+    ctx.fillStyle = bg; ctx.fillRect(0,0,w,h);
+    ctx.fillStyle = fg;
+    ctx.font = "700 " + (fs||96) + "px 'Avenir Next','Segoe UI',sans-serif";
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText(text, w/2, h/2+6);
+  });
+}
+/* Elegante Storefront-Beschriftung: nur die Buchstaben, gesperrt, mit warmem Schein */
+function elegantTex(text, fs){
+  return makeTex(1024, 190, function(ctx,w,h){
+    ctx.clearRect(0,0,w,h);
+    fs = fs || 92;
+    ctx.font = "500 " + fs + "px 'Didot','Bodoni 72','Playfair Display',Georgia,'Times New Roman',serif";
+    ctx.textBaseline = "middle"; ctx.textAlign = "left";
+    var chars = text.split("");
+    var sp = fs * .3;
+    var widths = chars.map(function(c){ return ctx.measureText(c).width; });
+    var total = widths.reduce(function(a,b){ return a+b; }, 0) + sp*(chars.length-1);
+    var x = (w - total)/2;
+    ctx.shadowColor = "rgba(255,205,140,.95)"; ctx.shadowBlur = 18;
+    ctx.fillStyle = "#f6efdd";
+    for(var i=0; i<chars.length; i++){
+      ctx.fillText(chars[i], x, h/2 + 6);
+      ctx.fillText(chars[i], x, h/2 + 6);
+      x += widths[i] + sp;
+    }
+  });
+}
+
+/* ---------- Materialien ---------- */
+var M = {
+  grass:    new THREE.MeshStandardMaterial({map:texGrass, roughness:1}),
+  road:     new THREE.MeshStandardMaterial({map:texAsphalt, roughness:.95}),
+  lane:     new THREE.MeshStandardMaterial({map:texLane, roughness:.95}),
+  paver:    new THREE.MeshStandardMaterial({map:texPaver, roughness:.72}),
+  concrete: new THREE.MeshStandardMaterial({map:texConcrete, roughness:.9}),
+  brick:    new THREE.MeshStandardMaterial({map:texBrick, roughness:.85}),
+  steel:    new THREE.MeshStandardMaterial({color:0x1e2124, roughness:.5, metalness:.55}),
+  white:    new THREE.MeshBasicMaterial({color:0xf2f2f0}),
+  green:    new THREE.MeshBasicMaterial({color:0x3fd06e}),
+  glass:    new THREE.MeshPhysicalMaterial({color:0x6f93a8, roughness:.06, metalness:.1,
+              transparent:true, opacity:.22, side:THREE.DoubleSide, depthWrite:false}),
+  pv:       new THREE.MeshStandardMaterial({color:0x1a2650, roughness:.25, metalness:.65}),
+  greenroof:new THREE.MeshStandardMaterial({map:texGreenRoof, roughness:1}),
+  trunk:    new THREE.MeshStandardMaterial({color:0x5a4632, roughness:1}),
+  leaf:     new THREE.MeshStandardMaterial({color:0x3a6329, roughness:1}),
+  leaf2:    new THREE.MeshStandardMaterial({color:0x4b7531, roughness:1}),
+  foliage:  new THREE.MeshStandardMaterial({map:texLeaf, vertexColors:true, roughness:.9}),
+  bark:     new THREE.MeshStandardMaterial({map:texBark, roughness:1}),
+  hedgeCore:new THREE.MeshStandardMaterial({map:texLeaf, color:new THREE.Color(.6, .68, .58), roughness:.9}),
+  dark:     new THREE.MeshStandardMaterial({color:0x24272a, roughness:.7}),
+  darkFloor:new THREE.MeshStandardMaterial({color:0x2b2724, roughness:.6}),
+  wood:     new THREE.MeshStandardMaterial({color:0x8a6a45, roughness:.8}),
+  warm:     new THREE.MeshBasicMaterial({color:0xffd9a0})
+};
+
+function box(w,h,d,mat,x,y,z,shadow){
+  var m = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), mat);
+  m.position.set(x,y,z);
+  if(shadow!==false){m.castShadow = true; m.receiveShadow = true;}
+  scene.add(m);
+  return m;
+}
+function flat(w,d,mat,x,y,z){
+  var m = new THREE.Mesh(new THREE.PlaneGeometry(w,d), mat);
+  m.rotation.x = -Math.PI/2;
+  m.position.set(x,y,z);
+  m.receiveShadow = true;
+  scene.add(m);
+  return m;
+}
+
+/* ---------- Gelaende, Strassen, Flurstueck ---------- */
+flat(740, 740, M.grass, 0, 0, 0);
+flat(180, 9, M.road, 10, .03, -26);
+flat(9, 110, M.road, 33.5, .03, 15);
+for(var dx=-70; dx<80; dx+=7){ flat(3.2,.3,M.white,dx,.05,-26); }
+for(var dz=-28; dz<66; dz+=7){ flat(.3,3.2,M.white,33.5,.05,dz); }
+flat(180, 2.6, M.concrete, 10, .04, -20.2);
+flat(2.6, 100, M.concrete, 28.6, .04, 12);
+
+/* Flurstueck 4893 als Rechteck: x -23.25..25.25 (48,5 m), z -18.9..21.53 (40,43 m) = ca. 1.961 m2,
+   beginnt buendig an der Gehweghinterkante (z -18.9), der Gehweg bleibt durchgehend */
+var lotShape = new THREE.Shape();   /* shape y = -world z */
+lotShape.moveTo(-23.25, 18.9); lotShape.lineTo(25.25, 18.9); lotShape.lineTo(25.25, -21.53);
+lotShape.lineTo(-23.25, -21.53); lotShape.closePath();
+var lot = new THREE.Mesh(new THREE.ShapeGeometry(lotShape), M.grass);
+lot.rotation.x = -Math.PI/2;
+lot.position.y = .06; lot.receiveShadow = true;
+scene.add(lot);
+
+/* ---------- Drive-in: Einfahrt Westen, Bogen ums Cafe, Rueckweg hinten, Ausfahrt Osten ---------- */
+flat(3.5, 23.5, M.lane, -18, .12, -12.5);      /* Spur 1: Drive-in */
+flat(3, 23.5, M.road, -21.25, .12, -12.5);     /* Spur 2: Vorbeifahrt zum Parkplatz */
+var arcW = new THREE.Mesh(new THREE.RingGeometry(3.5, 7, 40, 1, Math.PI, Math.PI/2), M.lane);
+arcW.rotation.x = -Math.PI/2; arcW.position.set(-12.75, .12, -0.75);
+arcW.receiveShadow = true; scene.add(arcW);
+flat(15.5, 3.5, M.lane, -5, .12, 4.5);         /* Spur am Ausgabefenster, z 2.75..6.25 */
+flat(3.5, 28.3, M.lane, 23.2, .12, -10.1);     /* Ausfahrt Osten, x 21.45..24.95, z -24.25..4.05 */
+
+/* ---------- Fahrgasse als eine durchgehende Flaeche ----------
+   von der Vorbeifahrspur (Westen) ueber den Bogen hinweg bis zur Ausfahrt (Osten), Einbahn nach Osten,
+   eine Achse z 5.75..9.25 (3,5 m, gleiche Breite wie die Spuren), Westkante gerade bei x -22.75,
+   Kurve in die Ausfahrt mit R 5,2 m, bleibt komplett innerhalb des Grundstuecks */
+function roadShape(pts, mat, y){
+  var s = new THREE.Shape();
+  pts.forEach(function(p, i){
+    if(p.arc){ s.absarc(p.arc[0], -p.arc[1], p.arc[2], p.arc[3], p.arc[4], !!p.arc[5]); }
+    else if(i === 0){ s.moveTo(p[0], -p[1]); }
+    else{ s.lineTo(p[0], -p[1]); }
+  });
+  var m = new THREE.Mesh(new THREE.ShapeGeometry(s, 24), mat);
+  m.rotation.x = -Math.PI/2; m.position.y = y; m.receiveShadow = true; scene.add(m);
+  return m;
+}
+roadShape([
+  [-22.75, -0.75], [-19.75, -0.75],
+  {arc:[-12.75, -0.75, 7, Math.PI, 1.5*Math.PI]},   /* folgt der Aussenkante des Drive-in-Bogens */
+  [-12.75, 5.75], [21.45, 5.75], [21.45, 4.05], [24.95, 4.05],
+  [24.95, 6.55],
+  {arc:[19.75, 6.55, 5.2, 0, -Math.PI/2, true]},     /* Aussenkurve von der Fahrgasse in die Ausfahrt */
+  [-22.75, 11.75]                                    /* Fahrgasse z 5.75..11.75 = 6 m breit */
+], M.road, .1);
+
+/* ---------- Parkflaechen hinter den Gebaeuden ---------- */
+flat(14.825, 5, M.road, 14.0625, .1, 3.5);     /* E-Reihe 1 hinterm Restaurant, x 6.65..21.475, z 1..6 (davor die Fussgaengerachse) */
+/* hintere Stellplatzreihe z 11.75..16.75: 4,30 m Pflaster + 0,70 m Ueberhang ueber Rasen, Fussweg dazwischen */
+roadShape([[-22.75, 11.75], [3.65, 11.75], [3.65, 16.05], [-22.75, 16.05]], M.road, .1);   /* 11 normale Plaetze */
+roadShape([[6.65, 11.75], [21.05, 11.75], [21.05, 16.05], [6.65, 16.05]], M.road, .1);     /* 6 E-Plaetze */
+box(26.4, .1, .15, M.concrete, -9.55, .15, 16.0);                /* Radanschlag, Autos ragen mit der Nase ueber den Rasen */
+box(14.4, .1, .15, M.concrete, 13.85, .15, 16.0);
+for(var cp=0; cp<6; cp++){ flat(.7, .55, M.concrete, 7.85 + cp*2.4, .09, 16.975); }   /* Fundamente der Ladesaeulen */
+
+/* ---------- Gehwege in hellem Granit, ein zusammenhaengendes Netz ----------
+   vorne: Vorplatz Cafe -> Platz zwischen den Gebaeuden -> Terrasse Restaurant, alles am Gehweg angebunden
+   Mitte: breiter Durchgang zwischen den Gebaeuden mit Bank und Pflanzkuebeln
+   hinten: Weg entlang der Ladesaeulen, Platz am Ueberweg, Zebrastreifen ueber die Fahrgasse, Fussweg zur Fahrradstation */
+function worldUV(geom, x0, z0, S){
+  S = S || PAVE_S;
+  var pos = geom.attributes.position, uv = geom.attributes.uv;
+  for(var i=0; i<pos.count; i++){
+    uv.setXY(i, (x0 + pos.getX(i))/S, (pos.getY(i) - z0)/S);
+  }
+  uv.needsUpdate = true;
+}
+function pave(w, d, x, z){
+  var m = flat(w, d, M.paver, x, .1, z);
+  worldUV(m.geometry, x, z);
+  return m;
+}
+function paveShape(pts){
+  var m = roadShape(pts, M.paver, .1);
+  worldUV(m.geometry, 0, 0);
+  return m;
+}
+pave(18, 2.9, 12, -17.45);                     /* Vorplatz + Terrasse Restaurant, x 3..21, z -18.9..-16 */
+paveShape([[-2, -18.9], [3, -18.9], [3, 1], [2.75, 1], [2.75, 2.75], [-2, 2.75]]);  /* Platz vorne + Durchgang + Ankunft hinten */
+pave(12, 2, -8, -13);                          /* Vorplatz entlang Cafefront, x -14..-2, z -14..-12 */
+pave(2.2, 4.9, -8, -16.45);                    /* Zugang vom Gehweg zur Cafetuer */
+pave(18, 2, 12, -1);                           /* Weg hinter dem Restaurant, z -2..0, Ladesaeulen stehen auf dem Gruenstreifen dahinter */
+/* Fussgaengerachse, ueberall 3 m breit (x 3.65..6.65): vom Weg hinterm Restaurant ueber die Fahrgasse bis zur Fahrradstation */
+pave(3.9, 1.0, 4.7, .5);                       /* Anschluss an den Durchgang, z 0..1 */
+pave(3.0, 5.0, 5.15, 3.5);                     /* Platz am Ueberweg, z 1..6 */
+pave(3.0, 6.0, 5.15, 14.75);                   /* Fussweg durch die Parkreihe, z 11.75..17.75 */
+pave(5, 3.5, 5.15, 19.5);                      /* Fahrradstation hinten, x 2.65..7.65 */
+
+/* Ueberweg vom Platz am Flat Iron ueber die Fahrgasse zur Parkreihe (nicht mehr ueber die Drive-in-Spur),
+   als Aufpflasterung in hellem Granit mit Zebrastreifen, gleiche Breite wie Platz und Fussweg; niedrige Hecke trennt den Platz von der Drive-in-Spur */
+(function(){ var m = flat(3.0, 5.75, M.paver, 5.15, .115, 8.875); worldUV(m.geometry, 5.15, 8.875); })();
+for(var zs=6.5; zs<11.6; zs+=1){ flat(3.0, .5, M.white, 5.15, .14, zs); }
+
+/* Bank und Pflanzkuebel im Durchgang, Mitte bleibt frei */
+box(.55, .08, 2.0, M.wood, -1.35, .46, -7.5);
+box(.08, .42, 1.8, M.steel, -1.35, .22, -7.5);
+function planter(x, z){
+  box(.9, .6, 1.3, M.dark, x, .3, z);
+  var rnd = mulberry(Math.floor(x*97 + z*389 + 5)), bl = [];
+  [-.38, 0, .38].forEach(function(dz){
+    var r = .3 + rnd()*.08;
+    bl.push({x:x + (rnd()-.5)*.12, y:.78, z:z + dz, rx:r, ry:r*.9, rz:r, amp:.18, seed:rnd()*9, c:.9 + rnd()*.2, d:1});
+  });
+  bl.push({x:x, y:1.02, z:z + (rnd()-.5)*.3, rx:.28, ry:.25, rz:.3, amp:.18, seed:rnd()*9, c:1.05, d:1});
+  foliage(bl, [.95, 1, .9], true);
+}
+planter(-1.35, -4.6); planter(2.35, -9.5); planter(2.35, -5.5);
+
+/* Markierungen Drive-in */
+for(var ez=-3; ez>-19; ez-=3){                 /* endet vor dem Gehweg */
+  flat(.22,1.6,M.white,-16.25,.14,ez);         /* Aussenkante Drive-in-Spur */
+  flat(.22,1.6,M.white,-19.75,.14,ez);         /* Trennlinie der beiden Spuren */
+  flat(.22,1.6,M.white,-22.75,.14,ez);         /* Aussenkante Vorbeifahrspur */
+}
+for(var ax=-11; ax<-3; ax+=3.2){ flat(1.6,.22,M.white,ax,.14,2.75); }   /* Kante zum Cafe */
+flat(9.25, .16, M.white, -8.125, .14, 6.25);    /* durchgezogene Linie: Drive-in-Spur getrennt von der Fahrgasse bis zum Einfaedeln */
+/* Spurverengung nach der Ausgabe: Sperrflaeche (Zeichen 298) fuehrt die Drive-in-Spur von links auf die Hauptspur,
+   dadurch bleibt Abstand zur Hecke am Platz; davor ein Vorankuendigungspfeil (Zeichen 297.1) */
+(function(){
+  var poly = [[-3.5, 2.75], [2.75, 2.75], [2.75, 5.75], [3.65, 5.75], [3.65, 6.95]];
+  function strip(x1, z1, x2, z2, w){
+    var L = Math.hypot(x2 - x1, z2 - z1); if(L < .05) return;
+    var m = new THREE.Mesh(new THREE.PlaneGeometry(L, w), M.white);
+    m.rotation.order = "YXZ"; m.rotation.y = -Math.atan2(z2 - z1, x2 - x1); m.rotation.x = -Math.PI/2;
+    m.position.set((x1 + x2)/2, .142, (z1 + z2)/2); scene.add(m);
+  }
+  poly.forEach(function(a, i){ var b = poly[(i + 1) % poly.length]; strip(a[0], a[1], b[0], b[1], .16); });
+  /* Schraegstriche: Linien x - z = c, mit dem Polygon geschnitten */
+  for(var c = -7.0; c <= 1.0; c += 1.0){
+    var ts = [];
+    poly.forEach(function(a, i){
+      var b = poly[(i + 1) % poly.length];
+      var fa = a[0] - a[1] - c, fb = b[0] - b[1] - c;
+      if((fa <= 0 && fb > 0) || (fa > 0 && fb <= 0)){ var t = fa/(fa - fb); ts.push([a[0] + t*(b[0] - a[0]), a[1] + t*(b[1] - a[1])]); }
+    });
+    ts.sort(function(p, q){ return p[0] - q[0]; });
+    for(var k=0; k + 1 < ts.length; k += 2){
+      var p1 = ts[k], p2 = ts[k + 1], L = Math.hypot(p2[0] - p1[0], p2[1] - p1[1]);
+      if(L < .3) continue;
+      var sh = .12/L;   /* nicht ueber die Randlinie hinaus */
+      strip(p1[0] + (p2[0] - p1[0])*sh, p1[1] + (p2[1] - p1[1])*sh, p2[0] - (p2[0] - p1[0])*sh, p2[1] - (p2[1] - p1[1])*sh, .28);
+    }
+  }
+  var texMerge = makeTex(128, 320, function(ctx, w, h){
+    ctx.clearRect(0, 0, w, h); ctx.fillStyle = "#f2f2f0";
+    ctx.fillRect(w*.32, h*.42, 18, h*.56);                         /* Schaft */
+    ctx.save(); ctx.translate(w*.32 + 9, h*.43); ctx.rotate(.62);   /* abgeknickter Teil nach rechts */
+    ctx.fillRect(-9, -h*.2, 18, h*.2);
+    ctx.beginPath(); ctx.moveTo(0, -h*.33); ctx.lineTo(-30, -h*.18); ctx.lineTo(30, -h*.18); ctx.fill();
+    ctx.restore();
+  });
+  var g = new THREE.Group(); g.position.set(-5.2, .15, 4.35); g.rotation.y = -Math.PI/2; scene.add(g);
+  var a = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 3.0), new THREE.MeshBasicMaterial({map:texMerge, transparent:true}));
+  a.rotation.x = -Math.PI/2; g.add(a);
+})();
+for(var xz=3; xz>-17; xz-=3){ flat(.22,1.6,M.white,21.6,.14,xz); flat(.22,1.6,M.white,24.8,.14,xz); }
+flat(3.5, .5, M.white, 23.2, .145, -18.6);     /* Haltlinie vor dem Gehweg (zum Stoppschild) */
+/* gestrichelte Kanten entlang des Drive-in-Bogens, gleicher Rhythmus wie auf den Geraden */
+function dashArc(cx, cz, r, t0, t1){
+  var L = r*Math.abs(t1-t0), n = Math.max(1, Math.floor(L/3)), off = (L - (n-1)*3)/2;
+  for(var i=0; i<n; i++){
+    var t = t0 + (t1-t0)*((off + i*3)/L);
+    var d = new THREE.Mesh(new THREE.PlaneGeometry(1.6, .22), M.white);
+    d.rotation.x = -Math.PI/2; d.rotation.z = Math.atan2(Math.cos(t), -Math.sin(t));
+    d.position.set(cx + r*Math.cos(t), .14, cz - r*Math.sin(t));
+    scene.add(d);
+  }
+}
+dashArc(-12.75, -0.75, 7, Math.PI, 1.5*Math.PI);
+dashArc(-12.75, -0.75, 3.5, Math.PI, 1.5*Math.PI);
+var texArrow = makeTex(128, 256, function(ctx,w,h){
+  ctx.clearRect(0,0,w,h); ctx.fillStyle = "#f2f2f0";
+  ctx.fillRect(w/2-10, h*.35, 20, h*.5);
+  ctx.beginPath(); ctx.moveTo(w/2, h*.08); ctx.lineTo(w*.2, h*.4); ctx.lineTo(w*.8, h*.4); ctx.fill();
+});
+var matArrow = new THREE.MeshBasicMaterial({map:texArrow, transparent:true});
+function arrow(x, z, ry){
+  var g = new THREE.Group(); g.position.set(x, .15, z); g.rotation.y = ry; scene.add(g);
+  var a = new THREE.Mesh(new THREE.PlaneGeometry(1.1, 2.2), matArrow);
+  a.rotation.x = -Math.PI/2; g.add(a);
+}
+arrow(-18, -6, Math.PI); arrow(-18, -15, Math.PI);
+arrow(-10.5, 4.5, -Math.PI/2);
+arrow(23.2, -6, 0); arrow(23.2, -14, 0);
+/* Verkehrszeichen an der Ausfahrt:
+   - Zeichen 267 "Verbot der Einfahrt": links der Spur, nur zur Strasse hin sichtbar (Rueckseite grau)
+   - Zeichen 206 "Halt. Vorfahrt gewaehren." (Stopp): rechts der Spur, fuer ausfahrende Autos, mit Haltlinie */
+var signBack = new THREE.MeshStandardMaterial({color:0x8a8e92, roughness:.6, metalness:.4});
+box(.1, 2.2, .1, M.steel, 21.0, 1.1, -18.4);
+var noEntry = new THREE.Group(); noEntry.position.set(21.0, 2.25, -18.4);
+noEntry.rotation.y = Math.PI;                  /* Vorderseite zeigt nach Norden zum Friedrich-Ebert-Damm */
+var neC = new THREE.Mesh(new THREE.CircleGeometry(.42, 24), new THREE.MeshBasicMaterial({color:0xc22a20}));
+noEntry.add(neC);
+var neB = new THREE.Mesh(new THREE.PlaneGeometry(.56, .14), new THREE.MeshBasicMaterial({color:0xf4f4f2}));
+neB.position.z = .01; noEntry.add(neB);
+var neK = new THREE.Mesh(new THREE.CircleGeometry(.43, 24), signBack);
+neK.rotation.y = Math.PI; neK.position.z = -.01; noEntry.add(neK);
+scene.add(noEntry);
+
+var texStop = makeTex(256, 256, function(ctx, w, h){
+  function oct(r, col){
+    ctx.fillStyle = col; ctx.beginPath();
+    for(var i=0; i<8; i++){
+      var a = Math.PI/8 + i*Math.PI/4;
+      ctx[i ? "lineTo" : "moveTo"](w/2 + Math.cos(a)*r, h/2 + Math.sin(a)*r);
+    }
+    ctx.closePath(); ctx.fill();
+  }
+  ctx.clearRect(0, 0, w, h);
+  oct(127, "#f4f4f2"); oct(115, "#c22a20");
+  ctx.fillStyle = "#f4f4f2"; ctx.font = "700 74px 'Avenir Next','Segoe UI',Arial,sans-serif";
+  ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText("STOP", w/2, h/2 + 4);
+});
+box(.1, 2.2, .1, M.steel, 25.1, 1.1, -18.4);
+var stopSign = new THREE.Mesh(new THREE.PlaneGeometry(.9, .9), new THREE.MeshBasicMaterial({map:texStop, transparent:true}));
+stopSign.position.set(25.1, 2.25, -18.33);     /* Vorderseite zeigt nach Sueden zu den ausfahrenden Autos */
+scene.add(stopSign);
+var stopBack = new THREE.Mesh(new THREE.CircleGeometry(.45, 8, Math.PI/8), signBack);
+stopBack.rotation.y = Math.PI; stopBack.position.set(25.1, 2.25, -18.35); scene.add(stopBack);
+
+/* ---------- Glas + Innenleben ---------- */
+function glassWall(w, h, x, y, z, ry){
+  var g = new THREE.Mesh(new THREE.PlaneGeometry(w, h), M.glass);
+  g.position.set(x, y, z); g.rotation.y = ry || 0; scene.add(g);
+  var n = Math.max(2, Math.floor(w/1.7));
+  for(var i=0; i<=n; i++){
+    var mull = new THREE.Mesh(new THREE.BoxGeometry(.09, h, .09), M.steel);
+    mull.position.set(-w/2 + i*(w/n), 0, 0); g.add(mull);
+  }
+  var sill = new THREE.Mesh(new THREE.BoxGeometry(w+.1, .12, .14), M.steel);
+  sill.position.y = -h/2; g.add(sill);
+  var head = sill.clone(); head.position.y = h/2; g.add(head);
+  return g;
+}
+function pendant(x, y, z){
+  var s = new THREE.Mesh(new THREE.SphereGeometry(.09, 8, 6), M.warm);
+  s.position.set(x, y, z); scene.add(s);
+  var c = new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,.5,4), M.dark);
+  c.position.set(x, y+.3, z); scene.add(c);
+}
+
+/* ============ RESTAURANT "FLAT IRON": links (Osten), x 3..21, z -16..-2 ============ */
+box(17.8, .25, 13.8, M.darkFloor, 12, .13, -9);
+box(18.6, .6, 14.6, M.steel, 12, 5.15, -9);
+flat(17.6, 13.6, M.greenroof, 12, 5.48, -9);
+for(var pr=0; pr<3; pr++){
+  var pv = box(15, .12, 1.8, M.pv, 12, 5.95, -14.2 + pr*3.4);
+  pv.rotation.x = -.32;
+}
+box(1.4, .8, 2.2, M.steel, 18.5, 5.85, -4.5);
+[[-16],[-2]].forEach(function(zz){ box(18, 1.0, .5, M.brick, 12, 4.35, zz[0]); });
+box(18, .45, .5, M.brick, 12, .25, -2);
+box(7.5, .45, .5, M.brick, 6.75, .25, -16);            /* Sockel vorn mit Oeffnung fuer die Tuer */
+box(7.5, .45, .5, M.brick, 17.25, .25, -16);
+[[3],[21]].forEach(function(xx){
+  box(.5, 1.0, 14, M.brick, xx[0], 4.35, -9);
+  box(.5, .45, 14, M.brick, xx[0], .25, -9);
+});
+[[3.4,-15.6],[20.6,-15.6],[3.4,-2.4],[20.6,-2.4]].forEach(function(p){
+  box(.85, 4.85, .85, M.brick, p[0], 2.42, p[1]);
+});
+glassWall(6.8, 3.2, 7.1, 2.05, -16);                  /* Front links und rechts der Tuer */
+glassWall(6.8, 3.2, 16.9, 2.05, -16);
+glassWall(16.6, 3.2, 12, 2.05, -2);
+glassWall(12.6, 3.2, 3, 2.05, -9, Math.PI/2);
+glassWall(12.6, 3.2, 21, 2.05, -9, Math.PI/2);
+/* Innenausbau siehe unten (RESTAURANT innen) */
+function chairSet(x, z){                 /* Terrassentisch mit vier Hockern */
+  box(1.1,.06,1.1,M.wood,x,.74,z);
+  box(.08,.7,.08,M.steel,x,.37,z);
+  [[.8,0],[-.8,0],[0,.8],[0,-.8]].forEach(function(p){
+    box(.42,.06,.42,M.wood,x+p[0],.48,z+p[1]);
+    box(.05,.44,.05,M.steel,x+p[0],.24,z+p[1]);
+  });
+}
+/* Elegante Storefront-Beschriftung Richtung Friedrich-Ebert-Damm */
+var sFlat = new THREE.Mesh(new THREE.PlaneGeometry(7.5, 1.4),
+  new THREE.MeshBasicMaterial({map:elegantTex("FLAT IRON", 96), transparent:true}));
+sFlat.rotation.y = Math.PI; sFlat.position.set(12, 4.42, -16.3); scene.add(sFlat);
+var sFlat2 = new THREE.Mesh(new THREE.PlaneGeometry(6.5, 1.2),
+  new THREE.MeshBasicMaterial({map:elegantTex("FLAT IRON", 96), transparent:true}));
+sFlat2.position.set(12, 4.35, -1.68); scene.add(sFlat2);
+
+/* ============ CAFE "ESPRESSO HOUSE": rechts (Westen), x -14..-2, z -12..1, begehbar ============
+   EG: Bestellen (Tresen mit Kassen, Kuchenvitrine, Siebtraeger, Drive-in-Station), Stehsitzbank, Fensterbar, kleine Tische
+   OG: Lounge mit Sofas und Sesseln, elegante Tische, Gemeinschaftstisch, Serviceroboter mit Speiseaufzug
+   Treppe entlang der Westfassade, Treppenauge x -13.8..-12.4, z -10..-3.28 */
+var EG = .255, OGY = 4.48;
+var ST = {x1:-13.8, x2:-12.5, z1:-10, z2:-3.28, y0:EG, y1:OGY, n:24};
+
+/* ---- Texturen und Materialien innen ---- */
+var texOak = makeTex(512, 512, function(ctx, w, h){
+  var pw = h/12;
+  for(var r=0; r<12; r++){
+    var x = -Math.random()*w*.6;
+    while(x < w){
+      var L = w*(.45 + Math.random()*.5), v = (Math.random()-.5)*22;
+      ctx.fillStyle = "rgb(" + Math.round(196+v) + "," + Math.round(160+v*.9) + "," + Math.round(112+v*.7) + ")";
+      ctx.fillRect(x, r*pw, L, pw);
+      for(var g=0; g<6; g++){
+        ctx.fillStyle = "rgba(110,72,40," + (.05 + Math.random()*.08) + ")";
+        ctx.fillRect(x, r*pw + Math.random()*pw, L, 1 + Math.random()*1.5);
+      }
+      ctx.fillStyle = "rgba(60,40,25,.55)"; ctx.fillRect(x, r*pw, 2, pw);
+      x += L;
+    }
+    ctx.fillStyle = "rgba(60,40,25,.45)"; ctx.fillRect(0, r*pw, w, 1.5);
+  }
+});
+var texSlat = makeTex(256, 128, function(ctx, w, h){
+  ctx.fillStyle = "#b98f5e"; ctx.fillRect(0, 0, w, h);
+  for(var x=0; x<w; x+=16){
+    ctx.fillStyle = "rgba(255,235,200," + (.05 + Math.random()*.08) + ")"; ctx.fillRect(x + 2, 0, 10, h);
+    ctx.fillStyle = "#3a281a"; ctx.fillRect(x + 13, 0, 3, h);
+  }
+}, 8, 1);
+function menuTex(title, items){
+  return makeTex(512, 300, function(ctx, w, h){
+    ctx.fillStyle = "#1b1d1f"; ctx.fillRect(0, 0, w, h);
+    ctx.strokeStyle = "#c9a86a"; ctx.lineWidth = 3; ctx.strokeRect(10, 10, w-20, h-20);
+    ctx.fillStyle = "#f2ead8"; ctx.font = "600 40px Georgia, 'Times New Roman', serif";
+    ctx.textAlign = "center"; ctx.fillText(title, w/2, 62);
+    ctx.font = "26px 'Avenir Next','Segoe UI',Arial,sans-serif";
+    items.forEach(function(it, i){
+      ctx.textAlign = "left"; ctx.fillStyle = "#e8e2d4"; ctx.fillText(it[0], 40, 112 + i*42);
+      ctx.textAlign = "right"; ctx.fillStyle = "#c9a86a"; ctx.fillText(it[1], w-40, 112 + i*42);
+    });
+  });
+}
+var texPOS = makeTex(256, 180, function(ctx, w, h){
+  ctx.fillStyle = "#0f1a24"; ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = "#3fbf8f"; ctx.fillRect(0, 0, w, 30);
+  ctx.fillStyle = "#0f1a24"; ctx.font = "700 18px Arial"; ctx.fillText("Bestellung", 10, 21);
+  ctx.fillStyle = "#cfe0ea"; ctx.font = "15px Arial";
+  ["Cappuccino gross", "Kanelbulle", "Latte Macchiato"].forEach(function(t, i){ ctx.fillText(t, 12, 58 + i*24); });
+  ctx.fillStyle = "#3fbf8f"; ctx.font = "700 20px Arial"; ctx.fillText("Summe  10,70 EUR", 12, 160);
+});
+var texFace = makeTex(128, 96, function(ctx, w, h){
+  ctx.fillStyle = "#101a2c"; ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = "#5fe3ff";
+  [[40, 40], [88, 40]].forEach(function(p){ ctx.beginPath(); ctx.ellipse(p[0], p[1], 11, 15, 0, 0, 7); ctx.fill(); });
+  ctx.strokeStyle = "#5fe3ff"; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(64, 58, 14, .2*Math.PI, .8*Math.PI); ctx.stroke();
+});
+var texLift = makeTex(256, 128, function(ctx, w, h){
+  ctx.fillStyle = "#2a2d30"; ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = "#c9ced3"; ctx.fillRect(16, 14, w - 32, h - 46);
+  ctx.fillStyle = "#e8e2d4"; ctx.font = "600 20px Arial"; ctx.textAlign = "center";
+  ctx.fillText("SPEISEAUFZUG", w/2, h - 12);
+});
+M.oak       = new THREE.MeshStandardMaterial({map:texOak, roughness:.55});
+M.slat      = new THREE.MeshStandardMaterial({map:texSlat, roughness:.6});
+M.oakWood   = new THREE.MeshStandardMaterial({color:0xc29a68, roughness:.55});
+M.walnut    = new THREE.MeshStandardMaterial({color:0x5b3c26, roughness:.5});
+M.marble    = new THREE.MeshStandardMaterial({color:0xece8e1, roughness:.25, metalness:.05});
+M.blackTop  = new THREE.MeshStandardMaterial({color:0x1c1d1f, roughness:.3});
+M.stainless = new THREE.MeshStandardMaterial({color:0xc4c9ce, roughness:.28, metalness:.85});
+M.leather   = new THREE.MeshStandardMaterial({color:0x7a4a2c, roughness:.55});
+M.sage      = new THREE.MeshStandardMaterial({color:0x7f8c74, roughness:.9});
+M.sageLight = new THREE.MeshStandardMaterial({color:0xa3ae96, roughness:.9});
+M.cream     = new THREE.MeshStandardMaterial({color:0xd9cdb6, roughness:.9, side:THREE.DoubleSide});
+M.rust      = new THREE.MeshStandardMaterial({color:0xa25d3b, roughness:.85});
+M.slate     = new THREE.MeshStandardMaterial({color:0x4f5862, roughness:.9});
+M.rug       = new THREE.MeshStandardMaterial({color:0xb9ab92, roughness:1});
+M.rug2      = new THREE.MeshStandardMaterial({color:0x6d7a72, roughness:1});
+M.ceramic   = new THREE.MeshStandardMaterial({color:0x2e3134, roughness:.4});
+M.cupWhite  = new THREE.MeshStandardMaterial({color:0xf4f2ee, roughness:.3});
+M.robot     = new THREE.MeshStandardMaterial({color:0xf3f3f1, roughness:.35});
+M.cyan      = new THREE.MeshBasicMaterial({color:0x5fe3ff});
+M.shade     = new THREE.MeshStandardMaterial({color:0x1b1c1e, roughness:.5, metalness:.3, side:THREE.DoubleSide});
+M.screen    = new THREE.MeshBasicMaterial({map:texPOS});
+M.cake1     = new THREE.MeshStandardMaterial({color:0xd9b27c, roughness:.7});
+M.cake2     = new THREE.MeshStandardMaterial({color:0x6b3f2a, roughness:.7});
+M.cake3     = new THREE.MeshStandardMaterial({color:0xe6c9d0, roughness:.7});
+
+/* ---- Moebel-Bausteine (Sitzende schauen immer in lokale -z-Richtung, die Lehne liegt bei +z) ---- */
+function faceTo(x, z, tx, tz){ return Math.atan2(-(tx - x), -(tz - z)); }
+function grp(x, y, z, ry){ var g = new THREE.Group(); g.position.set(x, y, z); g.rotation.y = ry || 0; scene.add(g); return g; }
+function gbox(g, w, h, d, mat, x, y, z){
+  var m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+  m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true; g.add(m); return m;
+}
+function gcyl(g, rt, rb, h, mat, x, y, z, seg){
+  var m = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg || 16), mat);
+  m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true; g.add(m); return m;
+}
+function floorWood(x1, x2, z1, z2, y){
+  var m = flat(x2 - x1, z2 - z1, M.oak, (x1 + x2)/2, y, (z1 + z2)/2);
+  worldUV(m.geometry, (x1 + x2)/2, (z1 + z2)/2, 2.4);
+}
+function chairEl(x, y, z, ry, mat){            /* eleganter Stuhl: schlanke Stahlbeine, Holzsitz, geneigte Lehne */
+  var g = grp(x, y, z, ry);
+  [[-.19,-.19],[.19,-.19],[-.19,.19],[.19,.19]].forEach(function(p){ gcyl(g, .013, .013, .45, M.steel, p[0], .225, p[1], 6); });
+  gbox(g, .44, .05, .44, mat || M.oakWood, 0, .47, 0);
+  gcyl(g, .012, .012, .34, M.steel, -.19, .64, .2, 6); gcyl(g, .012, .012, .34, M.steel, .19, .64, .2, 6);
+  gbox(g, .42, .22, .03, mat || M.oakWood, 0, .76, .21).rotation.x = .12;
+}
+function armchair(x, y, z, ry, mat){
+  var g = grp(x, y, z, ry);
+  [[-.32,-.3],[.32,-.3],[-.32,.3],[.32,.3]].forEach(function(p){ gcyl(g, .02, .015, .12, M.walnut, p[0], .06, p[1], 6); });
+  gbox(g, .8, .22, .78, mat, 0, .23, 0);
+  gbox(g, .58, .1, .6, mat, 0, .39, -.03);
+  gbox(g, .8, .5, .16, mat, 0, .58, .31).rotation.x = .1;
+  gbox(g, .12, .26, .78, mat, -.34, .47, 0); gbox(g, .12, .26, .78, mat, .34, .47, 0);
+}
+function sofa(x, y, z, ry, mat, L, pillowMat){
+  L = L || 2;
+  var g = grp(x, y, z, ry);
+  [[-L/2+.1,-.35],[L/2-.1,-.35],[-L/2+.1,.35],[L/2-.1,.35]].forEach(function(p){ gcyl(g, .02, .015, .12, M.walnut, p[0], .06, p[1], 6); });
+  gbox(g, L, .24, .86, mat, 0, .24, 0);
+  gbox(g, L/2 - .2, .12, .64, mat, -L/4 + .02, .42, -.05); gbox(g, L/2 - .2, .12, .64, mat, L/4 - .02, .42, -.05);
+  gbox(g, L, .5, .18, mat, 0, .6, .34).rotation.x = .08;
+  gbox(g, .16, .3, .86, mat, -L/2 + .08, .5, 0); gbox(g, .16, .3, .86, mat, L/2 - .08, .5, 0);
+  if(pillowMat){
+    gbox(g, .38, .34, .1, pillowMat, -L/2 + .45, .62, .2).rotation.set(.25, .15, 0);
+    gbox(g, .38, .34, .1, pillowMat, L/2 - .45, .62, .2).rotation.set(.25, -.15, 0);
+  }
+}
+function tableRound(x, y, z, r, h){            /* Marmortisch mit schwarzem Saeulenfuss */
+  var g = grp(x, y, z, 0);
+  gcyl(g, r*.55, r*.6, .03, M.dark, 0, .015, 0, 20);
+  gcyl(g, .035, .035, h - .05, M.dark, 0, (h - .05)/2, 0, 8);
+  gcyl(g, r, r, .03, M.marble, 0, h - .015, 0, 28);
+  return g;
+}
+function cupOn(g, x, y, z){ gcyl(g, .045, .035, .08, M.cupWhite, x, y + .04, z, 12); }
+function coffeeTable(x, y, z){
+  var g = grp(x, y, z, 0);
+  gcyl(g, .45, .45, .04, M.walnut, 0, .4, 0, 28);
+  gcyl(g, .3, .3, .02, M.walnut, 0, .12, 0, 24);
+  [0, 2.09, 4.19].forEach(function(a){ gcyl(g, .015, .015, .38, M.dark, Math.cos(a)*.3, .2, Math.sin(a)*.3, 6); });
+  cupOn(g, .12, .42, -.05); cupOn(g, -.15, .42, .1);
+}
+function barStool(x, y, z){
+  var g = grp(x, y, z, 0);
+  gcyl(g, .17, .17, .02, M.dark, 0, .01, 0, 16);
+  gcyl(g, .025, .025, .72, M.steel, 0, .37, 0, 8);
+  var ring = new THREE.Mesh(new THREE.TorusGeometry(.15, .012, 6, 20), M.steel);
+  ring.rotation.x = Math.PI/2; ring.position.y = .3; g.add(ring);
+  gcyl(g, .19, .18, .06, M.leather, 0, .76, 0, 20);
+}
+function pendantLamp(x, z, yTop, drop){
+  var g = grp(x, yTop, z, 0);
+  gcyl(g, .006, .006, drop, M.dark, 0, -drop/2, 0, 4);
+  var sh = new THREE.Mesh(new THREE.CylinderGeometry(.05, .2, .22, 20, 1, true), M.shade);
+  sh.position.y = -drop - .08; g.add(sh);
+  var b = new THREE.Mesh(new THREE.SphereGeometry(.07, 10, 8), M.warm); b.position.y = -drop - .17; g.add(b);
+}
+function floorLamp(x, y, z){
+  var g = grp(x, y, z, 0);
+  gcyl(g, .16, .16, .02, M.dark, 0, .01, 0, 16);
+  gcyl(g, .012, .012, 1.45, M.dark, 0, .73, 0, 6);
+  var sh = new THREE.Mesh(new THREE.CylinderGeometry(.13, .2, .26, 20, 1, true), M.cream);
+  sh.position.y = 1.5; g.add(sh);
+  var b = new THREE.Mesh(new THREE.SphereGeometry(.06, 8, 6), M.warm); b.position.y = 1.45; g.add(b);
+}
+function rugAt(x, y, z, w, d, mat){ var r = box(w, .012, d, mat, x, y + .006, z, false); r.receiveShadow = true; }
+function pottedPlant(x, y, z, s){
+  s = s || 1;
+  var g = grp(x, y, z, 0);
+  gcyl(g, .22*s, .17*s, .42*s, M.ceramic, 0, .21*s, 0, 16);
+  var rnd = mulberry(Math.floor(x*53 + z*97 + y*11)), bl = [];
+  for(var i=0; i<6; i++){
+    var a = i/6*Math.PI*2 + rnd()*.5, r = (.22 + rnd()*.12)*s;
+    bl.push({x:x + Math.cos(a)*.18*s, y:y + (.7 + rnd()*.6)*s, z:z + Math.sin(a)*.18*s, rx:r, ry:r*1.2, rz:r, amp:.25, seed:rnd()*9, c:.9 + rnd()*.2, d:1});
+  }
+  bl.push({x:x, y:y + 1.35*s, z:z, rx:.2*s, ry:.28*s, rz:.2*s, amp:.25, seed:rnd()*9, c:1.05, d:1});
+  foliage(bl, [.9, 1, .88], true);
+}
+
+/* ---- Rohbau: Boden EG, Geschossdecke mit Treppenauge, Boden OG, Dach ---- */
+box(11.8, .25, 12.8, M.darkFloor, -8, .13, -5.5);
+floorWood(-13.85, -2.15, -11.85, .85, .262);
+box(10.5, .4, 13.2, M.steel, -7.15, 4.15, -5.5);
+box(1.7, .4, 2.1, M.steel, -13.25, 4.15, -11.05);
+box(1.7, .4, 4.38, M.steel, -13.25, 4.15, -1.09);
+box(.3, .4, 6.72, M.steel, -13.95, 4.15, -6.64);
+box(10.2, .12, 12.6, M.darkFloor, -7.3, 4.42, -5.5);
+box(1.4, .12, 1.8, M.darkFloor, -13.1, 4.42, -10.9);
+box(1.4, .12, 4.08, M.darkFloor, -13.1, 4.42, -1.24);
+floorWood(-12.4, -2.2, -11.8, .8, 4.487);
+floorWood(-13.8, -12.4, -11.8, -10, 4.487);
+floorWood(-13.8, -12.4, -3.28, .8, 4.487);
+box(12.6, .6, 13.6, M.steel, -8, 8.35, -5.5);
+flat(11.6, 12.6, M.greenroof, -8, 8.68, -5.5);
+for(var pc=0; pc<2; pc++){
+  var pv2 = box(9.5, .12, 1.8, M.pv, -8, 9.12, -9.9 + pc*3.4);
+  pv2.rotation.x = -.32;
+}
+/* Fassadenbaender: vorn mit Oeffnung fuer die Eingangstuer */
+box(4.5, .45, .5, M.steel, -11.75, .25, -12);
+box(4.5, .45, .5, M.steel, -4.25, .25, -12);
+box(4.75, .45, .5, M.steel, -11.625, .25, 1);       /* hinten mit Oeffnung fuer den Ausgabeerker */
+box(4.75, .45, .5, M.steel, -4.375, .25, 1);
+[[-12],[1]].forEach(function(zz){ box(12, .55, .5, M.steel, -8, 7.85, zz[0]); });
+[[-14],[-2]].forEach(function(xx){
+  box(.5, .45, 13, M.steel, xx[0], .25, -5.5);
+  box(.5, .55, 13, M.steel, xx[0], 7.85, -5.5);
+});
+[[-13.6,-11.6],[-2.4,-11.6],[-13.6,.6],[-2.4,.6]].forEach(function(p){
+  box(.85, 8.1, .85, M.brick, p[0], 4.05, p[1]);
+});
+glassWall(3.8, 3.2, -11.4, 2.1, -12);            /* Front EG links und rechts der Tuer */
+glassWall(3.8, 3.2, -4.6, 2.1, -12);
+glassWall(4.05, 3.2, -11.275, 2.1, 1);           /* Rueckseite EG links und rechts des Ausgabeerkers */
+glassWall(4.05, 3.2, -4.725, 2.1, 1);
+glassWall(2.5, .6, -8, 3.4, 1);                  /* Oberlicht ueber dem Erker */
+glassWall(11.6, 3.2, -14, 2.1, -5.5, Math.PI/2);
+glassWall(11.6, 3.2, -2, 2.1, -5.5, Math.PI/2);
+glassWall(10.6, 3.0, -8, 6.1, -12);
+glassWall(10.6, 3.0, -8, 6.1, 1);
+glassWall(11.6, 3.0, -14, 6.1, -5.5, Math.PI/2);
+glassWall(11.6, 3.0, -2, 6.1, -5.5, Math.PI/2);
+
+/* ---- Drive-in-Ausgabeerker an der Rueckseite: ragt bis an die Spur, Schiebefenster auf Fahrerhoehe ----
+   aussen x -9.25..-6.75, z 1..2.55, Fensteroeffnung x -8.65..-7.35, y 1.16..2.3 */
+var WIN = {x1:-8.65, x2:-7.35, y1:1.16, y2:2.3, z:2.45};
+floorWood(-9.05, -6.95, .85, 2.35, .262);
+box(2.5, .26, 1.55, M.steel, -8, .13, 1.775);                       /* Sockel */
+box(.2, 3.1, 1.55, M.steel, -9.15, 1.55, 1.775);                    /* Seitenwaende */
+box(.2, 3.1, 1.55, M.steel, -6.85, 1.55, 1.775);
+box(2.5, WIN.y1, .2, M.steel, -8, WIN.y1/2, WIN.z);                 /* Bruestung */
+box(2.5, 3.1 - WIN.y2, .2, M.steel, -8, (3.1 + WIN.y2)/2, WIN.z);   /* Sturz */
+box(.6, WIN.y2 - WIN.y1, .2, M.steel, -8.95, (WIN.y1 + WIN.y2)/2, WIN.z);
+box(.6, WIN.y2 - WIN.y1, .2, M.steel, -7.05, (WIN.y1 + WIN.y2)/2, WIN.z);
+box(2.7, .2, 1.75, M.steel, -8, 3.0, 1.825);                        /* Erkerdach */
+/* Fensterrahmen und Ausgabebrett aussen */
+box(1.42, .06, .26, M.dark, -8, WIN.y2 + .03, WIN.z, false);
+box(.06, WIN.y2 - WIN.y1, .26, M.dark, WIN.x1 - .03, (WIN.y1 + WIN.y2)/2, WIN.z, false);
+box(.06, WIN.y2 - WIN.y1, .26, M.dark, WIN.x2 + .03, (WIN.y1 + WIN.y2)/2, WIN.z, false);
+box(1.6, .04, .22, M.stainless, -8, WIN.y1 + .01, 2.64);           /* Ausgabebrett */
+/* Schiebefenster: rechte Scheibe fest, linke Scheibe faehrt beim Ausgeben auf */
+var winFix = new THREE.Mesh(new THREE.PlaneGeometry(.66, WIN.y2 - WIN.y1), M.glass);
+winFix.position.set(-7.68, (WIN.y1 + WIN.y2)/2, WIN.z + .04); scene.add(winFix);
+var winSlide = new THREE.Group(); winSlide.position.set(-8.32, (WIN.y1 + WIN.y2)/2, WIN.z - .03); scene.add(winSlide);
+winSlide.add(new THREE.Mesh(new THREE.PlaneGeometry(.66, WIN.y2 - WIN.y1), M.glass));
+[[-.33, 0, .03, WIN.y2 - WIN.y1], [.33, 0, .03, WIN.y2 - WIN.y1]].forEach(function(f){
+  var fr = new THREE.Mesh(new THREE.BoxGeometry(f[2], f[3], .04), M.dark); fr.position.x = f[0]; winSlide.add(fr);
+});
+var winGrip = new THREE.Mesh(new THREE.BoxGeometry(.03, .22, .05), M.stainless); winGrip.position.set(-.26, 0, -.04); winSlide.add(winGrip);
+winSlide.open = 0;
+/* Downlight im Erker (beleuchtet wird er vom Licht unter dem Vordach) */
+gcyl(grp(-8, 2.9, 1.7, 0), .12, .12, .02, M.warm, 0, -.01, 0, 16);
+
+/* ---- Treppe: schwebende Eichenstufen zwischen Stahlwangen, Glasbruestung ---- */
+(function(){
+  var rise = (ST.y1 - ST.y0)/ST.n, run = (ST.z2 - ST.z1)/ST.n, cx = (ST.x1 + ST.x2)/2;
+  for(var i=0; i<ST.n; i++){
+    box(ST.x2 - ST.x1 - .1, .06, run + .03, M.oakWood, cx, ST.y0 + (i + 1)*rise - .03, ST.z1 + (i + .5)*run);
+  }
+  var L = Math.hypot(ST.z2 - ST.z1, ST.y1 - ST.y0), ang = Math.atan2(ST.y1 - ST.y0, ST.z2 - ST.z1);
+  var my = (ST.y0 + ST.y1)/2, mz = (ST.z1 + ST.z2)/2;
+  [ST.x1 + .03, ST.x2 - .03].forEach(function(xx){
+    var s = box(.06, .3, L, M.dark, xx, my - .1, mz); s.rotation.x = -ang;
+  });
+  var gb = new THREE.Group(); gb.position.set(ST.x2, my + .5, mz); gb.rotation.x = -ang; scene.add(gb);
+  var gl = new THREE.Mesh(new THREE.PlaneGeometry(L, .85), M.glass); gl.rotation.y = Math.PI/2; gb.add(gl);
+  var hr = new THREE.Mesh(new THREE.BoxGeometry(.05, .05, L), M.steel); hr.position.y = .45; gb.add(hr);
+  /* Stauraum unter dem hohen Teil der Treppe */
+  box(1.2, 2.0, 2.65, M.walnut, cx, EG + 1.0, -4.7);
+  /* Bruestung um das Treppenauge im OG */
+  var b1 = new THREE.Mesh(new THREE.PlaneGeometry(6.72, 1.0), M.glass);
+  b1.rotation.y = Math.PI/2; b1.position.set(-12.4, OGY + .5, mz); scene.add(b1);
+  box(.05, .05, 6.72, M.steel, -12.4, OGY + 1.02, mz);
+  var b2 = new THREE.Mesh(new THREE.PlaneGeometry(1.4, 1.0), M.glass);
+  b2.position.set(-13.1, OGY + .5, -10); scene.add(b2);
+  box(1.4, .05, .05, M.steel, -13.1, OGY + 1.02, -10);
+})();
+
+/* ======== ERDGESCHOSS: Bestellen ======== */
+/* Bestelltresen quer im Raum, Front mit Eichenlamellen, schwarze Steinplatte */
+box(8.45, 1.0, .7, M.dark, -8.27, EG + .5, -3.0);
+var cf = new THREE.Mesh(new THREE.PlaneGeometry(8.45, .95), M.slat);
+cf.rotation.y = Math.PI; cf.position.set(-8.27, EG + .5, -3.355); scene.add(cf);
+box(8.6, .05, .82, M.blackTop, -8.27, EG + 1.025, -3.0);
+/* Kuchenvitrine */
+(function(){
+  var g = grp(-10.6, EG + 1.05, -3.0, 0);
+  gbox(g, 1.6, .05, .62, M.stainless, 0, .025, 0);
+  var gl = new THREE.Mesh(new THREE.BoxGeometry(1.6, .48, .62), M.glass); gl.position.y = .29; g.add(gl);
+  gbox(g, 1.56, .02, .58, M.cupWhite, 0, .27, 0);
+  [-.55, -.2, .15, .5].forEach(function(xx, i){
+    gcyl(g, .1, .1, .08, [M.cake1, M.cake2, M.cake3, M.cake1][i], xx, .1, 0, 16);
+    gbox(g, .16, .07, .1, [M.cake2, M.cake1, M.cake2, M.cake3][i], xx, .32, 0);
+  });
+})();
+/* Kassen (Bildschirm zum Personal, kleines Kundendisplay zum Gast) */
+function register(x, y, z, ry){
+  var g = grp(x, y, z, ry);
+  gcyl(g, .07, .09, .02, M.dark, 0, .01, 0, 12);
+  gcyl(g, .02, .02, .25, M.dark, 0, .13, 0, 6);
+  var scr = gbox(g, .34, .24, .03, M.dark, 0, .33, .02); scr.rotation.x = -.35;
+  var face = new THREE.Mesh(new THREE.PlaneGeometry(.31, .21), M.screen);
+  face.position.set(0, .33, .042); face.rotation.x = -.35; g.add(face);
+  gbox(g, .09, .02, .15, M.dark, .28, .02, -.25);                     /* Kartenterminal */
+}
+register(-8.4, EG + 1.05, -3.0, 0); register(-6.3, EG + 1.05, -3.0, 0);
+(function(){                                                          /* Becherstapel, Servietten */
+  var g = grp(-5.0, EG + 1.05, -2.85, 0);
+  for(var i=0; i<4; i++){ gcyl(g, .045, .035, .5, M.cupWhite, i*.11, .25, 0, 12); }
+  gbox(g, .14, .12, .1, M.walnut, .55, .06, 0);
+})();
+/* Durchgangsklappe fuer das Personal */
+box(1.85, .95, .05, M.oakWood, -3.07, EG + .48, -3.0);
+/* Rueckbuffet an der Suedfassade mit Siebtraegermaschinen und Muehlen, Luecke fuer das Drive-in-Fenster */
+box(3.2, 1.0, .62, M.dark, -10.9, EG + .5, .5);
+box(3.2, 1.0, .62, M.dark, -5.1, EG + .5, .5);
+box(3.3, .05, .66, M.blackTop, -10.9, EG + 1.025, .5);
+box(3.3, .05, .66, M.blackTop, -5.1, EG + 1.025, .5);
+function espressoMachine(x){
+  var g = grp(x, EG + 1.05, .5, Math.PI);
+  gbox(g, .8, .42, .5, M.stainless, 0, .21, 0);
+  gbox(g, .78, .12, .02, M.dark, 0, .3, .26);
+  [-.22, 0, .22].forEach(function(xx){ gcyl(g, .045, .045, .08, M.dark, xx, .14, .28, 10); cupOn(g, xx, 0, .3); });
+  for(var i=0; i<5; i++){ cupOn(g, -.3 + i*.15, .42, -.05); }
+}
+espressoMachine(-5.6); espressoMachine(-11.3);
+[-4.3, -10.0].forEach(function(x){                                     /* Kaffeemuehlen */
+  var g = grp(x, EG + 1.05, .5, 0);
+  gbox(g, .2, .32, .25, M.dark, 0, .16, 0);
+  gcyl(g, .08, .05, .2, M.glass, 0, .42, 0, 12);
+});
+/* Drive-in-Station im Ausgabeerker: Tresen direkt unter dem Schiebefenster */
+box(2.1, .88, .42, M.walnut, -8, EG + .44, 2.13);
+box(2.1, .04, .46, M.blackTop, -8, WIN.y1 - .02, 2.13);
+register(-8.6, WIN.y1, 2.05, Math.PI);   /* Drive-in-Kasse, Bildschirm zum Personal */
+(function(){                              /* fertige Bestellung: Becher im Halter und Papiertuete */
+  var g = grp(-7.75, WIN.y1, 2.1, 0);
+  gbox(g, .3, .02, .2, M.oakWood, 0, .01, 0);
+  cupOn(g, -.07, .02, 0); cupOn(g, .07, .02, 0);
+  gbox(g, .22, .3, .14, M.oakWood, .3, .15, -.02);
+})();
+/* Menuetafeln, abgehaengt ueber dem Rueckbuffet, zum Gastraum ausgerichtet */
+[[-10.9, "KAFFEE", [["Espresso","2,60"],["Cappuccino","3,90"],["Latte","4,20"],["Flat White","4,10"]]],
+ [-8.0, "TEE & MEHR", [["Chai Latte","4,30"],["Matcha Latte","4,50"],["Kakao","3,80"],["Eistee","3,50"]]],
+ [-5.1, "FIKA", [["Kanelbulle","3,20"],["Croissant","2,40"],["Bagel","5,90"],["Bowl","6,50"]]]].forEach(function(b){
+  var m = new THREE.Mesh(new THREE.PlaneGeometry(1.75, 1.03), new THREE.MeshBasicMaterial({map:menuTex(b[1], b[2])}));
+  m.rotation.y = Math.PI; m.position.set(b[0], 3.0, .35); scene.add(m);
+  box(1.8, 1.07, .03, M.dark, b[0], 3.0, .37, false);
+  box(.01, .9, .01, M.dark, b[0] - .7, 3.95 - .45, .37, false); box(.01, .9, .01, M.dark, b[0] + .7, 3.95 - .45, .37, false);
+});
+/* Kuehlschrank und Regal im Personalbereich westlich des Buffets */
+box(.75, 2.0, .7, M.stainless, -13.3, EG + 1.0, -1.6);
+box(.6, 1.6, .5, M.walnut, -13.35, EG + .8, -.2);
+/* Pendelleuchten ueber dem Tresen */
+[-11.9, -9.45, -6.55, -4.4].forEach(function(x){ pendantLamp(x, -3.0, 3.95, .55); });
+
+/* Fensterbar an der Front mit Barhockern (Blick auf den Friedrich-Ebert-Damm) */
+box(3.7, .05, .45, M.oakWood, -4.75, EG + 1.08, -11.6);
+box(.05, 1.05, .38, M.dark, -6.4, EG + .53, -11.6); box(.05, 1.05, .38, M.dark, -3.1, EG + .53, -11.6);
+[-6.2, -5.3, -4.4, -3.5].forEach(function(x){ barStool(x, EG, -10.98); });
+/* Stehsitzbank an der Ostfassade, gepolstert, mit hohen Tischen davor */
+box(.5, .65, 5.0, M.dark, -2.4, EG + .325, -7.1);
+box(.52, .1, 5.0, M.leather, -2.4, EG + .7, -7.1);
+box(.12, .55, 5.0, M.leather, -2.18, EG + 1.05, -7.1);
+box(.04, .04, 5.0, M.steel, -2.72, EG + .3, -7.1);
+[-8.5, -7.1, -5.7].forEach(function(z, i){
+  var t = tableRound(-3.3, EG, z, .32, 1.05);
+  cupOn(t, .08, 1.05, -.05);
+  if(i !== 1) cupOn(t, -.1, 1.05, .08);
+});
+/* zwei kleine Bistrotische mit je zwei Stuehlen, einander zugewandt */
+[-8.4, -5.8].forEach(function(z){
+  var t = tableRound(-10.4, EG, z, .33, .75);
+  cupOn(t, .1, .75, 0);
+  chairEl(-11.15, EG, z, faceTo(-11.15, z, -10.4, z));
+  chairEl(-9.65, EG, z, faceTo(-9.65, z, -10.4, z));
+});
+[-10.4].forEach(function(x){ pendantLamp(x, -8.4, 3.95, 1.05); pendantLamp(x, -5.8, 3.95, 1.05); });
+[-8.5, -7.1, -5.7].forEach(function(z){ pendantLamp(-3.3, z, 3.95, .8); });
+pottedPlant(-10.0, EG, -11.35, 1.0);
+rugAt(-8, EG, -10.9, 2.6, 1.6, M.rug2);                                  /* Sauberlaufmatte am Eingang */
+
+/* ======== OBERGESCHOSS: Lounge ======== */
+/* Lounge-Gruppen am Frontfenster: Sofa mit dem Ruecken zum Fenster, Sessel zum Tisch gedreht */
+[[-5.6, M.sage, M.rust], [-10.2, M.slate, M.cream]].forEach(function(gp){
+  var cx = gp[0];
+  rugAt(cx, OGY, -9.7, 3.1, 2.5, M.rug);
+  coffeeTable(cx, OGY, -9.4);
+  sofa(cx, OGY, -10.75, faceTo(cx, -10.75, cx, -9.4), gp[1], 2.0, gp[2]);
+  armchair(cx - 1.3, OGY, -9.0, faceTo(cx - 1.3, -9.0, cx, -9.4), gp[1] === M.sage ? M.cream : M.sageLight);
+  armchair(cx + 1.3, OGY, -9.0, faceTo(cx + 1.3, -9.0, cx, -9.4), gp[1] === M.sage ? M.cream : M.sageLight);
+});
+floorLamp(-4.2, OGY, -11.0); floorLamp(-11.5, OGY, -11.0);
+/* elegante Tische fuer vier, Stuehle zum Tisch ausgerichtet */
+[-9.6, -6.1].forEach(function(tx){
+  var tz = -5.9, t = tableRound(tx, OGY, tz, .45, .75);
+  cupOn(t, .15, .75, -.1); cupOn(t, -.12, .75, .14);
+  [[0, -.78], [0, .78], [-.78, 0], [.78, 0]].forEach(function(o){
+    chairEl(tx + o[0], OGY, tz + o[1], faceTo(tx + o[0], tz + o[1], tx, tz));
+  });
+  pendantLamp(tx, tz, 8.05, 1.55);
+});
+/* Gemeinschaftstisch an der Rueckseite */
+(function(){
+  var g = grp(-7.6, OGY, -1.4, 0);
+  gbox(g, 3.6, .05, .9, M.oakWood, 0, .74, 0);
+  [[-1.65, -.35], [1.65, -.35], [-1.65, .35], [1.65, .35]].forEach(function(p){ gbox(g, .05, .72, .05, M.dark, p[0], .36, p[1]); });
+  cupOn(g, -1.0, .765, -.15); cupOn(g, .4, .765, .2); cupOn(g, 1.2, .765, -.1);
+  [-8.95, -8.05, -7.15, -6.25].forEach(function(x){
+    chairEl(x, OGY, -2.25, faceTo(x, -2.25, x, -1.4));
+    chairEl(x, OGY, -.55, faceTo(x, -.55, x, -1.4));
+  });
+  [-8.8, -7.6, -6.4].forEach(function(x){ pendantLamp(x, -1.4, 8.05, 1.55); });
+})();
+/* Sofaecke an der Ostfassade, Blick in den Raum */
+rugAt(-3.3, OGY, -6.0, 2.2, 2.4, M.rug2);
+sofa(-2.72, OGY, -6.0, faceTo(-2.72, -6.0, -4.0, -6.0), M.rust, 2.0, M.cream);
+coffeeTable(-3.95, OGY, -6.0);
+floorLamp(-2.6, OGY, -7.45);
+/* Pflanzen */
+pottedPlant(-2.95, OGY, -10.7, 1.1); pottedPlant(-3.3, OGY, .25, 1.1); pottedPlant(-12.9, OGY, -10.9, 1.0);
+/* Speiseaufzug: hier holt der Roboter die Bestellungen aus der Kueche ab */
+box(1.0, 1.1, .6, M.stainless, -12.1, OGY + .55, .6);
+var lift = new THREE.Mesh(new THREE.PlaneGeometry(.9, .45), new THREE.MeshBasicMaterial({map:texLift}));
+lift.rotation.y = Math.PI; lift.position.set(-12.1, OGY + .75, .29); scene.add(lift);
+
+/* ---- Serviceroboter (Tabletts vorne offen, Display mit Gesicht, schaut in lokale -z-Richtung) ---- */
+function makeRobot(){
+  var g = new THREE.Group();
+  gcyl(g, .27, .29, .2, M.dark, 0, .1, 0, 24);
+  var led = new THREE.Mesh(new THREE.TorusGeometry(.275, .012, 6, 32), M.cyan);
+  led.rotation.x = Math.PI/2; led.position.y = .2; g.add(led);
+  gbox(g, .16, 1.05, .1, M.robot, 0, .7, .2);
+  [.45, .72, .99].forEach(function(y){
+    gcyl(g, .26, .26, .025, M.robot, 0, y, 0, 24);
+    var rim = new THREE.Mesh(new THREE.TorusGeometry(.255, .01, 4, 28), M.dark);
+    rim.rotation.x = Math.PI/2; rim.position.y = y + .015; g.add(rim);
+  });
+  cupOn(g, -.08, .725, -.06); cupOn(g, .09, .725, -.02);
+  gcyl(g, .11, .11, .015, M.cupWhite, 0, .47, -.04, 16); gcyl(g, .06, .06, .05, M.cake2, 0, .5, -.04, 12);
+  gbox(g, .44, .3, .16, M.robot, 0, 1.33, .12);
+  var face = new THREE.Mesh(new THREE.PlaneGeometry(.36, .23), new THREE.MeshBasicMaterial({map:texFace}));
+  face.rotation.y = Math.PI; face.position.set(0, 1.33, .038); g.add(face);
+  [-.14, .14].forEach(function(x){ var e = gcyl(g, .0, .06, .1, M.robot, x, 1.52, .12, 4); e.rotation.y = Math.PI/4; });
+  return g;
+}
+function Robot(y, pts){
+  this.g = makeRobot(); this.g.position.set(pts[0].x, y, pts[0].z); scene.add(this.g);
+  this.pts = pts; this.i = 0; this.wait = pts[0].w || 0; this.yaw = 0;
+}
+Robot.prototype.update = function(dt){
+  var nxt = this.pts[(this.i + 1) % this.pts.length], p = this.g.position;
+  var dx = nxt.x - p.x, dz = nxt.z - p.z, d = Math.hypot(dx, dz);
+  if(this.wait > 0){ this.wait -= dt; return; }
+  var want = Math.atan2(-dx, -dz), diff = Math.atan2(Math.sin(want - this.yaw), Math.cos(want - this.yaw));
+  this.yaw += Math.max(-2.2*dt, Math.min(2.2*dt, diff)); this.g.rotation.y = this.yaw;
+  if(Math.abs(diff) > .5) return;                                        /* erst drehen, dann fahren */
+  var step = .55*dt;
+  if(d <= step){ p.x = nxt.x; p.z = nxt.z; this.i = (this.i + 1) % this.pts.length; this.wait = nxt.w || 0; }
+  else { p.x += dx/d*step; p.z += dz/d*step; }
+};
+var robots = [
+  /* EG: holt am Tresen ab, bringt zur Stehsitzbank und zu den Bistrotischen */
+  new Robot(EG, [{x:-4.6, z:-3.95, w:4}, {x:-4.6, z:-4.7}, {x:-3.95, z:-5.7, w:3}, {x:-5.3, z:-6.4},
+                 {x:-9.0, z:-7.1, w:3}, {x:-6.5, z:-5.0}]),
+  /* OG: holt am Speiseaufzug ab, serviert an den beiden Tischen und faehrt zurueck */
+  new Robot(OGY, [{x:-12.1, z:-.25, w:4}, {x:-11.2, z:-1.8}, {x:-10.9, z:-3.8}, {x:-10.4, z:-4.95, w:3},
+                  {x:-9.8, z:-3.7}, {x:-6.0, z:-3.7}, {x:-5.3, z:-4.95, w:3}, {x:-6.2, z:-3.5},
+                  {x:-10.2, z:-3.4}, {x:-11.2, z:-1.8}])
+];
+
+var sEsp = new THREE.Mesh(new THREE.PlaneGeometry(8.5, 1.2),
+  new THREE.MeshBasicMaterial({map:elegantTex("ESPRESSO HOUSE", 72), transparent:true}));
+sEsp.rotation.y = Math.PI; sEsp.position.set(-8, 7.9, -12.32); scene.add(sEsp);
+var sEsp2 = new THREE.Mesh(new THREE.PlaneGeometry(7.5, 1.05),
+  new THREE.MeshBasicMaterial({map:elegantTex("ESPRESSO HOUSE", 72), transparent:true}));
+sEsp2.position.set(-8, 7.85, 1.32); scene.add(sEsp2);
+
+/* ---------- Eingangstueren frontal Richtung Friedrich-Ebert-Damm: automatische Schiebetueren ----------
+   schlanke Bronzezarge, zwei Glasfluegel mit schmalem Bronzerahmen und Stangengriffen */
+M.bronze = new THREE.MeshStandardMaterial({color:0x8c6b47, roughness:.35, metalness:.8});
+function frontDoor(x, z){
+  box(.12, 3.2, .22, M.bronze, x - 1.44, 1.6, z - .04);
+  box(.12, 3.2, .22, M.bronze, x + 1.44, 1.6, z - .04);
+  box(3.0, .14, .22, M.bronze, x, 3.13, z - .04);
+  function leaf(side){
+    var g = new THREE.Group(); g.position.set(x + side*.68, 1.5, z - .14); scene.add(g);
+    g.add(new THREE.Mesh(new THREE.PlaneGeometry(1.3, 2.9), M.glass));
+    [[0, 1.43, 1.3, .05], [0, -1.43, 1.3, .07], [-.63, 0, .05, 2.9], [.63, 0, .05, 2.9]].forEach(function(f){
+      var fr = new THREE.Mesh(new THREE.BoxGeometry(f[2], f[3], .05), M.bronze); fr.position.set(f[0], f[1], 0); g.add(fr);
+    });
+    [-.05, .05].forEach(function(dz){
+      var hd = new THREE.Mesh(new THREE.CylinderGeometry(.018, .018, 1.1, 8), M.bronze);
+      hd.position.set(-side*.5, -.05, dz); g.add(hd);
+    });
+    return g;
+  }
+  box(3.9, .16, 1.35, M.steel, x, 3.42, z - .72);                   /* Vordach */
+  var dl = new THREE.Mesh(new THREE.SphereGeometry(.07, 8, 6), M.warm);
+  dl.position.set(x, 3.3, z - .72); scene.add(dl);
+  return {x:x, z:z, d1:leaf(-1), d2:leaf(1), open:0};
+}
+var restDoor = frontDoor(12, -16);      /* Restaurant */
+var cafeDoor = frontDoor(-8, -12);      /* Cafe */
+
+/* ============ RESTAURANT "FLAT IRON" innen: Steakhaus, begehbar ============
+   Rueckseite: offene Kueche mit Holzkohlegrill und Ausgabetheke (Pass), Ostseite: Bar mit Hockern,
+   Westseite: Lederbank mit Zweiertischen, Mitte: Vierertische, vorn: Fenstertische, Nordwesten: grosser Tisch.
+   Alle Sitze schauen zum Tisch, keiner zur Wand. */
+var RF = .255;
+var texCeil = makeTex(256, 256, function(ctx, w, h){
+  ctx.fillStyle = "#1d140e"; ctx.fillRect(0, 0, w, h);
+  for(var x=0; x<w; x+=32){
+    var v = (Math.random() - .5)*18;
+    ctx.fillStyle = "rgb(" + Math.round(158+v) + "," + Math.round(110+v*.9) + "," + Math.round(68+v*.7) + ")";
+    ctx.fillRect(x + 5, 0, 22, h);
+    ctx.fillStyle = "rgba(255,230,190,.08)"; ctx.fillRect(x + 5, 0, 3, h);
+  }
+}, 9, 6);
+var texTile = makeTex(256, 256, function(ctx, w, h){
+  ctx.fillStyle = "#b9b0a2"; ctx.fillRect(0, 0, w, h);
+  for(var r=0; r<8; r++){
+    for(var c=-1; c<4; c++){
+      var x = c*64 + (r%2)*32, v = (Math.random() - .5)*12;
+      ctx.fillStyle = "rgb(" + Math.round(236+v) + "," + Math.round(229+v) + "," + Math.round(216+v) + ")";
+      ctx.fillRect(x + 2, r*32 + 2, 60, 28);
+    }
+  }
+}, 14, 4);
+M.oakDark   = new THREE.MeshStandardMaterial({map:texOak, color:0x7d6350, roughness:.6});
+M.leatherDk = new THREE.MeshStandardMaterial({color:0x4a2a1b, roughness:.55});
+M.leatherCg = new THREE.MeshStandardMaterial({color:0x7a4129, roughness:.5});
+M.tableTop  = new THREE.MeshStandardMaterial({color:0x3b2619, roughness:.45});
+M.ceilWood  = new THREE.MeshStandardMaterial({map:texCeil, roughness:.85, side:THREE.DoubleSide});
+M.tile      = new THREE.MeshStandardMaterial({map:texTile, roughness:.35});
+M.kitFloor  = new THREE.MeshStandardMaterial({color:0x3b3a37, roughness:.7});
+M.ember     = new THREE.MeshBasicMaterial({color:0xff6a24});
+M.heat      = new THREE.MeshBasicMaterial({color:0xffb070});
+M.steak     = new THREE.MeshStandardMaterial({color:0x5e2f1d, roughness:.7});
+M.herb      = new THREE.MeshStandardMaterial({color:0x4f7a35, roughness:.8});
+M.slatDark  = new THREE.MeshStandardMaterial({map:texSlat, color:0x8a6a50, roughness:.6});
+M.backlit   = new THREE.MeshBasicMaterial({color:0x7a5230});
+M.wineGl    = new THREE.MeshStandardMaterial({color:0xdfe8ea, roughness:.1, transparent:true, opacity:.5});
+
+/* Boden (dunkle Eiche), Kuechenboden, Lamellendecke aus Holz */
+(function(){
+  var f = flat(17.5, 13.5, M.oakDark, 12, .262, -9); worldUV(f.geometry, 12, -9, 2.4);
+  flat(11.75, 3.15, M.kitFloor, 14.875, .266, -3.825);
+  var c = new THREE.Mesh(new THREE.PlaneGeometry(17.5, 13.5), M.ceilWood);
+  c.rotation.x = Math.PI/2; c.position.set(12, 4.0, -9); scene.add(c);
+})();
+
+var restStart = scene.children.length;   /* ab hier Innenausbau: wirft keinen Sonnenschatten (liegt unter dem Dach) */
+function restTable(x, z, w, d, plates, steak){   /* Holztisch auf schwarzem Stahlgestell, Gedeck, kleine Tischleuchte */
+  var g = grp(x, RF, z, 0);
+  gbox(g, w, .045, d, M.tableTop, 0, .75, 0);
+  gbox(g, w - .14, .05, d - .14, M.steel, 0, .705, 0);
+  [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(function(s){ gbox(g, .04, .69, .04, M.steel, s[0]*(w/2 - .09), .345, s[1]*(d/2 - .09)); });
+  plates.forEach(function(p, i){
+    gcyl(g, .13, .11, .015, M.cupWhite, p[0], .78, p[1], 18);
+    if(steak && i % 2 === 0){
+      var s = gbox(g, .15, .035, .1, M.steak, p[0], .805, p[1]); s.rotation.y = .4;
+      gcyl(g, .025, .025, .02, M.herb, p[0] + .06, .8, p[1] - .05, 6);
+    }
+    var n = Math.hypot(p[0], p[1]) || 1, nx = p[0]/n, nz = p[1]/n;
+    gcyl(g, .032, .026, .12, M.wineGl, p[0] - nz*.17 - nx*.1, .83, p[1] + nx*.17 - nz*.1, 10);
+  });
+  gcyl(g, .05, .06, .02, M.bronze, 0, .783, 0, 12);
+  gcyl(g, .008, .008, .16, M.bronze, 0, .87, 0, 6);
+  var lb = new THREE.Mesh(new THREE.SphereGeometry(.05, 10, 8), M.warm); lb.position.set(0, .97, 0); g.add(lb);
+  return g;
+}
+function restChair(x, z, tx, tz){ chairEl(x, RF, z, faceTo(x, z, tx, tz), M.leatherDk); }
+
+/* Lederbank an der Westfassade mit fuenf Zweiertischen, Stuehle gegenueber */
+(function(){
+  var bx = 3.35, z1 = -14.9, z2 = -5.9, L = z2 - z1, cz = (z1 + z2)/2;
+  box(.62, .4, L, M.walnut, bx + .31, RF + .2, cz);
+  box(.58, .1, L - .04, M.leatherCg, bx + .33, RF + .45, cz);
+  for(var s = z1 + .05; s < z2 - .1; s += 1.8){
+    var e = Math.min(z2 - .05, s + 1.72);
+    var b = box(.16, .62, e - s, M.leatherCg, bx + .12, RF + .86, (s + e)/2); b.rotation.z = .08;
+  }
+  box(.1, .05, L, M.bronze, bx + .05, RF + 1.19, cz);
+  [-14.0, -12.2, -10.4, -8.6, -6.8].forEach(function(z, i){
+    restTable(4.62, z, .72, .72, [[-.2, 0], [.2, 0]], i % 2 === 0);
+    restChair(5.32, z, 4.62, z);
+    pendantLamp(4.62, z, 4.0, 1.95);
+  });
+})();
+
+/* Vierertische in der Mitte, Mittelgang von der Tuer zur Ausgabetheke bleibt frei */
+[7.8, 10.3, 14.6].forEach(function(x, ci){
+  [-13.3, -10.5, -7.7].forEach(function(z, ri){
+    restTable(x, z, .9, .9, [[-.28, 0], [.28, 0], [0, -.28], [0, .28]], (ci + ri) % 2 === 0);
+    [[-.68, 0], [.68, 0], [0, -.68], [0, .68]].forEach(function(o){ restChair(x + o[0], z + o[1], x, z); });
+    pendantLamp(x, z, 4.0, 1.95);
+  });
+});
+
+/* Fenstertische vorn rechts der Tuer, Stuehle seitlich zum Fenster (einander zugewandt) */
+[16.6, 19.2].forEach(function(x){
+  var z = -14.6;
+  restTable(x, z, .72, .72, [[-.2, 0], [.2, 0]], false);
+  restChair(x - .62, z, x, z); restChair(x + .62, z, x, z);
+  pendantLamp(x, z, 4.0, 1.95);
+});
+
+/* grosser Tisch fuer Gruppen im Nordwesten */
+(function(){
+  var x = 6.1, z = -3.8;
+  restTable(x, z, 2.6, .95, [[-.85, -.3], [0, -.3], [.85, -.3], [-.85, .3], [0, .3], [.85, .3], [-1.12, 0], [1.12, 0]], true);
+  [-.85, 0, .85].forEach(function(dx){ restChair(x + dx, z - .72, x + dx, z); restChair(x + dx, z + .72, x + dx, z); });
+  restChair(x - 1.62, z, x, z); restChair(x + 1.62, z, x, z);
+  pendantLamp(x - .65, z, 4.0, 1.95); pendantLamp(x + .65, z, 4.0, 1.95);
+})();
+
+/* Bar an der Ostseite: Tresen mit Lamellenfront, Fussleiste, Zapfanlage, Hocker, beleuchtetes Flaschenregal */
+(function(){
+  var bx = 18.6, z1 = -12.6, z2 = -6.2, L = z2 - z1, cz = (z1 + z2)/2;
+  box(.5, 1.05, L, M.slatDark, bx, RF + .525, cz);
+  box(.78, .05, L + .1, M.blackTop, bx - .1, RF + 1.075, cz);
+  var rail = new THREE.Mesh(new THREE.CylinderGeometry(.025, .025, L, 8), M.bronze);
+  rail.rotation.x = Math.PI/2; rail.position.set(bx - .45, RF + .22, cz); scene.add(rail);
+  box(1.9, 1.05, .45, M.slatDark, 19.75, RF + .525, z1 - .02);           /* Abschluss zur Fassade */
+  box(1.95, .05, .5, M.blackTop, 19.75, RF + 1.075, z1 - .02);
+  [-9.1, -8.6].forEach(function(z){                                       /* Zapfhaehne */
+    var g = grp(bx + .05, RF + 1.1, z, 0);
+    gcyl(g, .045, .045, .36, M.stainless, 0, .18, 0, 10);
+    gbox(g, .1, .05, .1, M.stainless, -.05, .34, 0);
+    gcyl(g, .012, .012, .14, M.bronze, -.11, .26, 0, 6);
+  });
+  for(var z = -12.0; z <= -6.7; z += .8) barStool(17.9, RF, z);
+  box(.55, .95, L - .4, M.walnut, 20.4, RF + .475, cz);                   /* Rueckbuffet */
+  box(.6, .04, L - .35, M.blackTop, 20.4, RF + .97, cz);
+  box(.04, 1.5, L - .5, M.backlit, 20.72, RF + 2.05, cz, false);          /* hinterleuchtete Rueckwand */
+  var bottleGeo = new THREE.LatheGeometry([new THREE.Vector2(0, 0), new THREE.Vector2(.036, 0), new THREE.Vector2(.036, .2),
+    new THREE.Vector2(.014, .26), new THREE.Vector2(.012, .32), new THREE.Vector2(0, .32)], 10);
+  var bMats = [new THREE.MeshStandardMaterial({color:0x2f5a3a, roughness:.15, metalness:.2}),
+               new THREE.MeshStandardMaterial({color:0x8a4f1c, roughness:.15, metalness:.2}),
+               new THREE.MeshStandardMaterial({color:0xd8d2c4, roughness:.15, metalness:.2})];
+  var inst = bMats.map(function(m){ return new THREE.InstancedMesh(bottleGeo, m, 20); }), cnt = [0, 0, 0], mtx = new THREE.Matrix4();
+  [1.45, 1.9, 2.35].forEach(function(y, i){
+    box(.3, .03, L - .5, M.walnut, 20.55, RF + y, cz, false);
+    for(var k=0; k<14; k++){
+      var t = (k + i) % 3, zz = z1 + .45 + k*(L - .9)/13;
+      mtx.makeTranslation(20.55, RF + y + .015, zz); inst[t].setMatrixAt(cnt[t]++, mtx);
+    }
+  });
+  inst.forEach(function(im, t){ im.count = cnt[t]; scene.add(im); });
+  [-11.0, -9.4, -7.8].forEach(function(z){ pendantLamp(bx, z, 4.0, 1.75); });
+})();
+
+/* offene Kueche: Fliesenrueckwand, Kochzeile mit Holzkohlegrill, Haube, Ausgabetheke mit Waermelampen */
+(function(){
+  box(11.3, 3.4, .1, M.tile, 14.75, RF + 1.7, -2.33);
+  box(.12, 2.8, 3.1, M.slatDark, 9.06, RF + 1.4, -3.85);
+  box(10.6, .9, .7, M.stainless, 14.9, RF + .45, -2.75);
+  box(2.2, .05, .62, M.dark, 13.2, RF + .925, -2.75);
+  var ember = new THREE.Mesh(new THREE.PlaneGeometry(2.0, .5), M.ember);
+  ember.rotation.x = -Math.PI/2; ember.position.set(13.2, RF + .955, -2.75); scene.add(ember);
+  for(var gx = 12.25; gx <= 14.2; gx += .15){ box(.015, .015, .55, M.steel, gx, RF + .975, -2.75, false); }
+  [16.0, 16.6, 17.2].forEach(function(x, i){
+    var g = grp(x, RF + .9, -2.75, 0);
+    gcyl(g, .15, .13, .07, M.dark, 0, .035, 0, 16);
+    if(i === 1) gcyl(g, .12, .12, .03, M.steak, 0, .06, 0, 10);
+  });
+  box(6.4, .5, 1.1, M.stainless, 14.6, 2.85, -2.85);
+  box(.5, 4.0 - 3.1, .5, M.stainless, 14.6, (4.0 + 3.1)/2, -2.75, false);
+  /* Ausgabetheke: Gaeste-/Serviceseite mit Lamellen, Edelstahlplatte, Waermebruecke */
+  var px1 = 9.4, px2 = 16.8, pcx = (px1 + px2)/2, pL = px2 - px1;
+  box(pL, 1.05, .7, M.slatDark, pcx, RF + .525, -5.0);
+  box(pL + .1, .05, .8, M.stainless, pcx, RF + 1.075, -5.0);
+  box(pL, .06, .3, M.stainless, pcx, RF + 2.05, -5.0);
+  [px1 + .3, px2 - .3].forEach(function(x){ box(.03, 4.0 - RF - 2.05, .03, M.steel, x, (4.0 + RF + 2.05)/2, -5.0, false); });
+  for(var i=0; i<6; i++){
+    var lx = px1 + .7 + i*(pL - 1.4)/5;
+    var sh = new THREE.Mesh(new THREE.CylinderGeometry(.06, .16, .16, 16, 1, true), M.shade);
+    sh.position.set(lx, RF + 1.94, -5.0); scene.add(sh);
+    var hb = new THREE.Mesh(new THREE.SphereGeometry(.055, 10, 8), M.heat);
+    hb.position.set(lx, RF + 1.88, -5.0); scene.add(hb);
+  }
+  for(var k=0; k<6; k++){ box(.08, .1, .005, M.cupWhite, 10.2 + k*.55, RF + 1.97, -4.84, false); }   /* Bons an der Leiste */
+  [10.3, 11.3, 12.5, 13.7, 15.0, 15.9].forEach(function(x, i){                                         /* fertige Teller */
+    var g = grp(x, RF + 1.1, -5.0, 0);
+    gcyl(g, .14, .12, .015, M.cupWhite, 0, .008, 0, 18);
+    var s = gbox(g, .16, .035, .11, M.steak, 0, .033, 0); s.rotation.y = .5 + i*.3;
+    gcyl(g, .03, .03, .02, M.herb, .07, .025, -.05, 6);
+  });
+})();
+
+/* Empfangspult neben der Tuer */
+(function(){
+  var g = grp(9.6, RF, -15.0, 0);
+  gbox(g, .9, 1.05, .45, M.walnut, 0, .525, 0);
+  gbox(g, .96, .04, .5, M.blackTop, 0, 1.07, 0);
+  gcyl(g, .05, .06, .02, M.bronze, .3, 1.1, 0, 10); gcyl(g, .008, .008, .25, M.bronze, .3, 1.22, 0, 6);
+  var b = new THREE.Mesh(new THREE.SphereGeometry(.06, 10, 8), M.warm); b.position.set(.3, 1.37, 0); g.add(b);
+  gbox(g, .3, .02, .22, M.cupWhite, -.15, 1.1, 0);
+})();
+pottedPlant(4.0, RF, -15.3, 1.0); pottedPlant(14.1, RF, -15.25, .9);
+pottedPlant(3.8, RF, -2.75, 1.0); pottedPlant(8.55, RF, -2.75, .9);
+scene.children.slice(restStart).forEach(function(g){ g.traverse(function(o){ o.castShadow = false; }); });
+
+/* ---------- Kollision im Cafe (fuer den Rundgang) ---------- */
+var cafeWallsEG = [
+  {x1:-14.2, x2:-9.35, z1:-12.2, z2:-11.85}, {x1:-6.65, x2:-1.8, z1:-12.2, z2:-11.85},   /* Front mit Tueroeffnung */
+  {x1:-2.15, x2:-1.8, z1:-12.2, z2:1.2}, {x1:-14.2, x2:-13.85, z1:-12.2, z2:1.2}, {x1:-14.2, x2:-1.8, z1:.85, z2:1.2},
+  {x1:-14.05, x2:-13.18, z1:-12.05, z2:-11.18}, {x1:-2.83, x2:-1.95, z1:-12.05, z2:-11.18},
+  {x1:-14.05, x2:-13.18, z1:.18, z2:1.05}, {x1:-2.83, x2:-1.95, z1:.18, z2:1.05}
+];
+var cafeWallsOG = [{x1:-14.2, x2:-1.8, z1:-12.2, z2:-11.85}].concat(cafeWallsEG.slice(2));
+var colEG = cafeWallsEG.concat([
+  {x1:-12.5, x2:-4.0, z1:-3.4, z2:-2.6}, {x1:-4.0, x2:-2.15, z1:-3.06, z2:-2.94},       /* Tresen, Personalklappe */
+  {x1:-6.6, x2:-2.9, z1:-11.85, z2:-10.75},                                             /* Fensterbar mit Hockern */
+  {x1:-3.65, x2:-2.0, z1:-9.65, z2:-4.55},                                              /* Stehsitzbank mit Tischen */
+  {x1:-11.4, x2:-9.4, z1:-8.75, z2:-8.05}, {x1:-11.4, x2:-9.4, z1:-6.15, z2:-5.45},     /* Bistrotische */
+  {x1:-10.25, x2:-9.75, z1:-11.6, z2:-11.1},                                            /* Pflanze am Eingang */
+  {x1:-12.55, x2:-12.45, z1:-9.6, z2:-3.28}, {x1:-13.85, x2:-12.45, z1:-6.05, z2:-3.2},  /* Treppengelaender, Stauraum */
+  {x1:-9.3, x2:-6.7, z1:.85, z2:2.78}                                                   /* Drive-in-Ausgabeerker */
+]);
+var colOG = cafeWallsOG.concat([
+  {x1:-12.45, x2:-12.35, z1:-10.05, z2:-3.28}, {x1:-13.9, x2:-12.35, z1:-10.1, z2:-9.95}, /* Bruestung Treppenauge */
+  {x1:-7.35, x2:-3.85, z1:-11.2, z2:-8.55}, {x1:-11.95, x2:-8.45, z1:-11.2, z2:-8.55},   /* Lounge-Gruppen */
+  {x1:-10.65, x2:-8.55, z1:-6.95, z2:-4.85}, {x1:-7.15, x2:-5.05, z1:-6.95, z2:-4.85},   /* Tische fuer vier */
+  {x1:-9.45, x2:-5.75, z1:-2.55, z2:-.25},                                               /* Gemeinschaftstisch */
+  {x1:-4.4, x2:-2.1, z1:-7.6, z2:-4.95},                                                 /* Sofaecke */
+  {x1:-12.65, x2:-11.55, z1:.25, z2:.95},                                                /* Speiseaufzug */
+  {x1:-3.3, x2:-2.6, z1:-11.05, z2:-10.35}, {x1:-3.65, x2:-2.95, z1:-.1, z2:.6}, {x1:-13.25, x2:-12.55, z1:-11.25, z2:-10.55}
+]);
+var stairCol = cafeWallsEG.concat([{x1:-12.55, x2:-12.45, z1:-9.6, z2:-3.28}]);
+
+
+/* ---------- Drive-in-Fenster, Vordach, Menuetafel, Pylon ---------- */
+var sOut = new THREE.Mesh(new THREE.PlaneGeometry(1.7, .3),
+  new THREE.MeshBasicMaterial({map:signTex("AUSGABE", "#101315", "#f0c86a", 120)}));
+sOut.position.set(-8, 2.68, 2.56); scene.add(sOut);
+box(5.2, .3, 4.8, M.steel, -8, 3.4, 3.4);
+box(.18, 3.25, .18, M.steel, -10.3, 1.62, 5.6);
+box(.18, 3.25, .18, M.steel, -5.7, 1.62, 5.6);
+var sDT = new THREE.Mesh(new THREE.PlaneGeometry(4.6, .8),
+  new THREE.MeshBasicMaterial({map:signTex("DRIVE-IN  →", "#101315", "#f0c86a", 92)}));
+sDT.position.set(-8, 3.1, 5.86); scene.add(sDT);
+var sDT2 = sDT.clone(); sDT2.rotation.y = -Math.PI/2;
+sDT2.position.set(-10.66, 3.1, 3.4); scene.add(sDT2);
+function totem(x, z, ry){
+  var g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = ry; scene.add(g);
+  var b = new THREE.Mesh(new THREE.BoxGeometry(1.1, 2.5, .28), M.dark);
+  b.position.y = 1.35; b.castShadow = true; g.add(b);
+  var scr = new THREE.Mesh(new THREE.PlaneGeometry(.9, 1.7),
+    new THREE.MeshBasicMaterial({map:makeTex(128, 256, function(ctx,w,h){
+      ctx.fillStyle = "#0d0f10"; ctx.fillRect(0,0,w,h);
+      ctx.fillStyle = "#f0c86a"; ctx.font = "700 26px sans-serif"; ctx.textAlign="center";
+      ctx.fillText("MENÜ", w/2, 36);
+      ctx.fillStyle = "#cfd6d2";
+      for(var y=64; y<h-14; y+=26){ ctx.fillRect(14, y, w-28-Math.random()*36, 9); }
+    })}));
+  scr.position.set(0, 1.55, .15); g.add(scr);
+}
+totem(-15.5, -8, -Math.PI/2);                  /* Bestellterminal an der Drive-in-Spur */
+box(.16, 2.4, .16, M.steel, -14.9, 1.2, -18.4);
+var sIn = new THREE.Mesh(new THREE.PlaneGeometry(2.6, .62),
+  new THREE.MeshBasicMaterial({map:signTex("DRIVE-IN →", "#14210f", "#9fd08c", 86)}));
+sIn.rotation.y = Math.PI; sIn.position.set(-14.9, 2.1, -18.4); scene.add(sIn);
+/* Schild an der zweiten Spur: Vorbeifahrt zum Parkplatz */
+box(.16, 2.4, .16, M.steel, -23.0, 1.2, -17.5);
+var sPark = new THREE.Mesh(new THREE.PlaneGeometry(2.6, .62),
+  new THREE.MeshBasicMaterial({map:signTex("P  PARKEN ↓", "#1b2733", "#cfe0f0", 82)}));
+sPark.rotation.y = Math.PI; sPark.position.set(-23.0, 2.1, -17.5); scene.add(sPark);
+
+/* ---------- 12 E-Ladeplaetze hinter dem Restaurant ---------- */
+var texE = makeTex(128,128,function(ctx,w,h){
+  ctx.clearRect(0,0,w,h); ctx.strokeStyle = "#3fd06e"; ctx.lineWidth = 9;
+  ctx.strokeRect(20,14,88,100);
+  ctx.fillStyle = "#3fd06e"; ctx.font = "700 74px sans-serif"; ctx.textAlign = "center";
+  ctx.fillText("⚡", w/2, 92);
+});
+var matE = new THREE.MeshBasicMaterial({map:texE, transparent:true});
+function charger(x, z, ry){
+  var g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = ry||0; scene.add(g);
+  var b = new THREE.Mesh(new THREE.BoxGeometry(.5,1.5,.35),
+    new THREE.MeshStandardMaterial({color:0xe8e8e6, roughness:.5}));
+  b.position.y = .8; b.castShadow = true; g.add(b);
+  var stripe = new THREE.Mesh(new THREE.BoxGeometry(.52,.18,.37), M.green);
+  stripe.position.y = 1.35; g.add(stripe);
+  var scr = new THREE.Mesh(new THREE.PlaneGeometry(.3,.42),
+    new THREE.MeshBasicMaterial({color:0x0d3b22}));
+  scr.position.set(0,1.02,.19); g.add(scr);
+}
+/* Reihe 1: 6 Plaetze direkt hinterm Restaurant, z 1..6 (der frueher erste Platz ist jetzt der Platz am Ueberweg) */
+for(var s=0; s<7; s++){ flat(.16, 5, M.green, 6.65+s*2.45, .14, 3.5); }
+flat(14.7, .16, M.green, 14.0, .14, 6);
+for(var s1=0; s1<6; s1++){
+  flat(1.6,1.6,matE,7.875+s1*2.45,.15,2.4);
+  charger(7.875+s1*2.45, .5);
+}
+/* Reihe 2: 6 Plaetze in der hinteren Reihe, Ladesaeulen hinter dem Ueberhang */
+for(var s2=0; s2<6; s2++){
+  flat(1.6,1.6,matE,7.85+s2*2.4,.15,14.9);
+  charger(7.85+s2*2.4, 17.0, Math.PI);
+}
+
+/* ---------- 11 normale Stellplaetze hinter dem Cafe, in einer Reihe mit den E-Plaetzen ---------- */
+/* Stellplatzreihe z 11.75..16.05 (+ 0,70 m Ueberhang): 11 normale (weiss), Fussweg, 6 E (gruen) */
+for(var b1=0; b1<12; b1++){ flat(.16, 4.3, M.white, -22.75 + b1*2.4, .14, 13.9); }
+for(var b2=0; b2<7; b2++){ flat(.16, 4.3, M.green, 6.65 + b2*2.4, .14, 13.9); }
+flat(26.4, .16, M.white, -9.55, .14, 11.75);
+flat(14.4, .16, M.green, 13.85, .14, 11.75);
+
+/* ---------- Autos ---------- */
+function makeCar(color){
+  var g = new THREE.Group();
+  var pm = new THREE.MeshStandardMaterial({color:color, roughness:.35, metalness:.35});
+  var body = new THREE.Mesh(new THREE.BoxGeometry(4.2, .95, 1.85), pm);
+  body.position.y = .65; body.castShadow = true; g.add(body);
+  var cab = new THREE.Mesh(new THREE.BoxGeometry(2.2, .75, 1.7), pm);
+  cab.position.set(-.2, 1.42, 0); cab.castShadow = true; g.add(cab);
+  var ws = new THREE.Mesh(new THREE.BoxGeometry(2.24, .55, 1.6),
+    new THREE.MeshStandardMaterial({color:0x1c2830, roughness:.15, metalness:.4}));
+  ws.position.copy(cab.position); g.add(ws);
+  var wg = new THREE.CylinderGeometry(.36,.36,.28,16);
+  var wm = new THREE.MeshStandardMaterial({color:0x161719, roughness:.9});
+  [[-1.35,.9],[-1.35,-.9],[1.35,.9],[1.35,-.9]].forEach(function(p){
+    var wh = new THREE.Mesh(wg, wm); wh.rotation.x = Math.PI/2;
+    wh.position.set(p[0], .38, p[1]); wh.castShadow = true; g.add(wh);
+  });
+  var hl = new THREE.Mesh(new THREE.BoxGeometry(.1,.18,.4),
+    new THREE.MeshBasicMaterial({color:0xfff3c0}));
+  hl.position.set(2.1,.7,.55); g.add(hl);
+  var hl2 = hl.clone(); hl2.position.z = -.55; g.add(hl2);
+  scene.add(g);
+  return g;
+}
+/* normale Stellplaetze: eine Reihe, Nase Sued */
+var carColors = [0x8d9298, 0x22262b, 0xe6e4df, 0x5c1f22, 0x4a5568, 0x6e6a63];
+[-21.55, -19.15, -14.35, -9.55, -7.15, 2.45].forEach(function(cx, i){
+  var pk = makeCar(carColors[i]);
+  pk.position.set(cx, 0, 14.3);
+  pk.rotation.y = -Math.PI/2 + (Math.random()-.5)*.04;
+});
+/* E-Autos */
+var ev1 = makeCar(0x1f6f54); ev1.position.set(7.875, 0, 3.1); ev1.rotation.y = Math.PI/2;
+var ev2 = makeCar(0xdfe2e4); ev2.position.set(17.675, 0, 3.1); ev2.rotation.y = Math.PI/2;
+var ev3 = makeCar(0x2a4460); ev3.position.set(12.65, 0, 14.3); ev3.rotation.y = -Math.PI/2;
+var cablePts = [new THREE.Vector3(7.875,1.1,.55), new THREE.Vector3(8.325,.8,1.0),
+                new THREE.Vector3(8.725,.68,1.45), new THREE.Vector3(8.805,.8,1.7)];
+scene.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(cablePts), 24, .035, 6),
+  new THREE.MeshStandardMaterial({color:0x111111, roughness:.6})));
+var st1 = makeCar(0x30506e); st1.position.set(-32, 0, -24.2);
+var st2 = makeCar(0x6e6a63); st2.position.set(40, 0, -28.2); st2.rotation.y = Math.PI;
+var st3 = makeCar(0x3a3f46); st3.position.set(35.4, 0, 26); st3.rotation.y = -Math.PI/2;
+
+/* Auto in der Drive-in-Spur */
+var driveCar = makeCar(0x832c24);
+var brakeL = new THREE.Mesh(new THREE.BoxGeometry(.1,.16,.38),
+  new THREE.MeshBasicMaterial({color:0xff2a1e}));
+brakeL.position.set(-2.12,.7,.55); driveCar.add(brakeL);
+var brakeR = brakeL.clone(); brakeR.position.z = -.55; driveCar.add(brakeR);
+var lanePath = new THREE.CatmullRomCurve3([
+  new THREE.Vector3(-18, 0, -23), new THREE.Vector3(-18, 0, -14), new THREE.Vector3(-18, 0, -8),
+  new THREE.Vector3(-18, 0, -0.75), new THREE.Vector3(-16.3, 0, 3.3), new THREE.Vector3(-12.75, 0, 4.35),
+  new THREE.Vector3(-8.3, 0, 3.95), new THREE.Vector3(-5.4, 0, 4.25), new THREE.Vector3(-2.4, 0, 5.35),   /* nach der Ausgabe frueh und weich auf die Hauptspur */
+  new THREE.Vector3(1.2, 0, 7.6), new THREE.Vector3(5.4, 0, 8.7), new THREE.Vector3(11, 0, 8.7), new THREE.Vector3(17, 0, 8.7),
+  new THREE.Vector3(20.4, 0, 8.55), new THREE.Vector3(22.65, 0, 7.2), new THREE.Vector3(23.25, 0, 4.8), new THREE.Vector3(23.2, 0, -4),
+  new THREE.Vector3(23.2, 0, -14), new THREE.Vector3(23.2, 0, -24)
+]);
+function laneT(x, z){
+  var best = 0, bd = 1e9;
+  for(var i=0; i<=500; i++){
+    var q = lanePath.getPointAt(i/500);
+    var d = (q.x-x)*(q.x-x) + (q.z-z)*(q.z-z);
+    if(d < bd){ bd = d; best = i/500; }
+  }
+  return best;
+}
+var laneStops = [{t:laneT(-18,-8), d:2.6}, {t:laneT(-8.3,3.95), d:4.5}];   /* Bestellterminal, Ausgabefenster (Fahrer auf Hoehe x -8) */
+
+/* ---------- Fahrraeder: Station hinten + Buegel vorn ---------- */
+function rack(x, z){
+  box(.07,.85,.07,M.steel,x,.42,z-.45);
+  box(.07,.85,.07,M.steel,x,.42,z+.45);
+  box(.07,.07,.97,M.steel,x,.85,z);
+}
+/* Fahrrad: Raeder stehen auf dem Pflaster (Oberkante y .1), Rahmen als Diamantrahmen, Laenge in lokaler x-Richtung */
+var bikeTire = new THREE.TorusGeometry(.335, .03, 8, 28), bikeRim = new THREE.TorusGeometry(.3, .012, 6, 28);
+var bikeTireMat = new THREE.MeshStandardMaterial({color:0x151617, roughness:.9});
+var bikeRimMat = new THREE.MeshStandardMaterial({color:0xb9bec2, roughness:.35, metalness:.8});
+var bikeCols = [0x1f3a5a, 0x7a1f1f, 0x2d4a2d, 0x111214, 0xb8b2a6, 0x3c5f7a, 0x5a4a2a];
+var bikeIdx = 0;
+function bike(x, z, ry){
+  var g = new THREE.Group(); g.position.set(x, .1, z); g.rotation.y = ry; scene.add(g);
+  var fm = new THREE.MeshStandardMaterial({color:bikeCols[bikeIdx++ % bikeCols.length], roughness:.4, metalness:.5});
+  var up = new THREE.Vector3(0, 1, 0);
+  function tube(a, b, r, mat){
+    var A = new THREE.Vector3(a[0], a[1], a[2] || 0), B = new THREE.Vector3(b[0], b[1], b[2] || 0), d = B.clone().sub(A);
+    var m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, d.length(), 6), mat);
+    m.position.copy(A).add(B).multiplyScalar(.5); m.quaternion.setFromUnitVectors(up, d.normalize()); g.add(m); return m;
+  }
+  var wy = .365, R = [-.52, wy], F = [.52, wy], Bb = [-.04, .3], S = [-.17, .8], H = [.37, .84], Hb = [.41, .69];
+  [R, F].forEach(function(c){
+    var t = new THREE.Mesh(bikeTire, bikeTireMat); t.position.set(c[0], c[1], 0); t.castShadow = true; g.add(t);
+    var rim = new THREE.Mesh(bikeRim, bikeRimMat); rim.position.set(c[0], c[1], 0); g.add(rim);
+    for(var k=0; k<4; k++){
+      var a = k*Math.PI/4;
+      tube([c[0] - Math.cos(a)*.3, c[1] - Math.sin(a)*.3], [c[0] + Math.cos(a)*.3, c[1] + Math.sin(a)*.3], .004, bikeRimMat);
+    }
+    var hub = new THREE.Mesh(new THREE.CylinderGeometry(.025, .025, .1, 8), bikeRimMat);
+    hub.rotation.x = Math.PI/2; hub.position.set(c[0], c[1], 0); g.add(hub);
+  });
+  tube(Bb, S, .018, fm); tube(S, H, .017, fm); tube(Hb, Bb, .02, fm); tube(Hb, H, .022, fm);
+  tube(R, Bb, .012, fm); tube(R, [S[0] + .02, S[1] - .03], .011, fm);
+  tube([Hb[0], Hb[1], .04], [F[0], F[1], .04], .011, fm); tube([Hb[0], Hb[1], -.04], [F[0], F[1], -.04], .011, fm);
+  tube(S, [S[0] - .03, S[1] + .1], .012, bikeRimMat);
+  var sad = new THREE.Mesh(new THREE.BoxGeometry(.24, .05, .11), M.leather); sad.position.set(S[0] - .04, S[1] + .13, 0); g.add(sad);
+  tube(H, [H[0] - .03, .98], .014, bikeRimMat);
+  tube([H[0] - .05, .98, -.25], [H[0] - .05, .98, .25], .012, bikeTireMat);
+  var crank = new THREE.Mesh(new THREE.CylinderGeometry(.07, .07, .03, 14), bikeRimMat);
+  crank.rotation.x = Math.PI/2; crank.position.set(Bb[0], Bb[1], .05); g.add(crank);
+  tube([Bb[0], Bb[1], .07], [Bb[0] + .1, Bb[1] - .12, .07], .01, bikeRimMat);
+  tube([Bb[0], Bb[1], -.07], [Bb[0] - .1, Bb[1] + .12, -.07], .01, bikeRimMat);
+}
+pave(4.5, 1.8, -11.75, -14);                   /* Fahrradbuegel am Cafe, buendig an den Vorplatz angeschlossen */
+for(var r=0; r<3; r++){ rack(-13.0 + r*1.2, -14); }
+bike(-12.8, -14, Math.PI/2 + .03); bike(-11.6, -14, -Math.PI/2 - .02); bike(-10.4, -14, Math.PI/2 - .03);
+[2.85, 5.15, 7.45].forEach(function(x){ box(.14, 2.3, .14, M.steel, x, 1.15, 21.05); });   /* Kragdach: Stuetzen nur hinten */
+box(4.8, 1.1, .06, M.steel, 5.15, 1.25, 21.1);                                               /* Rueckwand */
+box(5, .15, 3.6, M.steel, 5.15, 2.35, 19.5);
+var pvB = box(4.6, .08, 1.5, M.pv, 5.15, 2.48, 19.0); pvB.rotation.x = -.18;
+for(var r2=0; r2<6; r2++){ rack(3.0 + r2*.85, 19.7); }
+bike(3.2, 19.7, Math.PI/2 + .03); bike(4.05, 19.7, -Math.PI/2 - .02); bike(4.9, 19.7, Math.PI/2); bike(6.6, 19.7, -Math.PI/2 + .03);
+var sBike = new THREE.Mesh(new THREE.PlaneGeometry(1.6,.4),
+  new THREE.MeshBasicMaterial({map:signTex("FAHRRÄDER", "#1c3a52", "#cfe4f4", 74), side:THREE.DoubleSide}));
+sBike.position.set(5.15, 2.12, 17.68); sBike.rotation.y = Math.PI; scene.add(sBike);   /* Schild an der Dachkante */
+
+/* ---------- Terrasse, Gruen, Personen, Lampen ---------- */
+chairSet(5.5,-17.5); chairSet(8.2,-17.5); chairSet(15.8,-17.5);   /* Terrasse, Tuerbereich x 10.5..13.5 bleibt frei */
+/* ================= Vegetation =================
+   Kronen, Hecken und Straeucher bestehen aus mehreren unregelmaessig verformten Blattballen,
+   die je Pflanze zu einem einzigen Mesh zusammengefasst werden (Blatt-Textur + Vertexfarben fuer
+   Eigenschatten: unten und innen dunkler, oben heller). Zufall ist pro Standort fest (seeded). */
+function mulberry(a){
+  return function(){
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    var t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+function noise3(x, y, z, s){
+  return (Math.sin(x*1.9 + s)*Math.sin(y*2.3 + s*1.7)
+        + Math.sin(z*2.1 + s*2.9)*Math.cos(x*1.3 + s*.7)
+        + .5*Math.sin((x + y + z)*3.7 + s*4.1)) / 2.5;
+}
+function foliage(blobs, tint, shadow){
+  if(!foliage.cache) foliage.cache = {};
+  var total = 0, yMin = Infinity, yMax = -Infinity;
+  blobs.forEach(function(b){
+    var d = b.d || 2;
+    if(!foliage.cache[d]) foliage.cache[d] = new THREE.IcosahedronGeometry(1, d);
+    total += foliage.cache[d].attributes.position.count;
+    yMin = Math.min(yMin, b.y - b.ry); yMax = Math.max(yMax, b.y + b.ry);
+  });
+  yMin = Math.max(0, yMin);
+  var P = new Float32Array(total*3), N = new Float32Array(total*3),
+      C = new Float32Array(total*3), U = new Float32Array(total*2), o = 0;
+  blobs.forEach(function(b){
+    var g = foliage.cache[b.d || 2], pos = g.attributes.position, uv = g.attributes.uv;
+    for(var i=0; i<pos.count; i++){
+      var dx = pos.getX(i), dy = pos.getY(i), dz = pos.getZ(i);
+      var k = 1 + b.amp*noise3(dx*2.4, dy*2.4, dz*2.4, b.seed);
+      var px = b.x + dx*b.rx*k, py = b.y + dy*b.ry*k, pz = b.z + dz*b.rz*k;
+      var nx = dx/b.rx, ny = dy/b.ry, nz = dz/b.rz, nl = Math.sqrt(nx*nx + ny*ny + nz*nz);
+      nx /= nl; ny /= nl; nz /= nl;
+      var hh = Math.min(1, Math.max(0, (py - yMin)/(yMax - yMin + 1e-6)));
+      var v = (b.c || 1) * (.42 + .58*Math.pow(hh, .8)) * (.8 + .2*(ny*.5 + .5))
+            * (.93 + .07*noise3(px*.9, py*.9, pz*.9, 3.1));
+      P[o*3] = px; P[o*3+1] = py; P[o*3+2] = pz;
+      N[o*3] = nx; N[o*3+1] = ny; N[o*3+2] = nz;
+      C[o*3] = tint[0]*v; C[o*3+1] = tint[1]*v; C[o*3+2] = tint[2]*v;
+      U[o*2] = uv.getX(i)*3; U[o*2+1] = uv.getY(i)*1.5;
+      o++;
+    }
+  });
+  var geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.BufferAttribute(P, 3));
+  geo.setAttribute("normal", new THREE.BufferAttribute(N, 3));
+  geo.setAttribute("color", new THREE.BufferAttribute(C, 3));
+  geo.setAttribute("uv", new THREE.BufferAttribute(U, 2));
+  geo.computeBoundingSphere();
+  var m = new THREE.Mesh(geo, M.foliage);
+  m.castShadow = shadow !== false; m.receiveShadow = true; scene.add(m);
+  return m;
+}
+/* Baum: Stamm mit Rinde + Wurzelanlauf + Aeste, Krone rund (Linde/Ahorn) oder schlank (Hainbuche) */
+function tree(x, z, s, type){
+  s = s || 1;
+  var rnd = mulberry(Math.floor(x*137 + z*911 + 7));
+  type = type || (rnd() < .3 ? "column" : "round");
+  var th = (type === "column" ? 2.0 : 2.2)*s, tl = th + 1.2*s;
+  var t = new THREE.Mesh(new THREE.CylinderGeometry(.1*s, .18*s, tl, 10, 1), M.bark);
+  t.position.set(x, tl/2, z); t.rotation.set((rnd()-.5)*.05, 0, (rnd()-.5)*.05);
+  t.castShadow = true; scene.add(t);
+  var rf = new THREE.Mesh(new THREE.CylinderGeometry(.18*s, .3*s, .25*s, 10), M.bark);
+  rf.position.set(x, .125*s, z); scene.add(rf);
+  for(var bi=0; bi<3; bi++){
+    var a = rnd()*Math.PI*2, L = (.9 + rnd()*.5)*s;
+    var br = new THREE.Mesh(new THREE.CylinderGeometry(.03*s, .07*s, L, 6), M.bark);
+    var dir = new THREE.Vector3(Math.cos(a)*.75, 1, Math.sin(a)*.75).normalize();
+    br.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
+    br.position.set(x + dir.x*L*.5, th*.9 + bi*.3*s + dir.y*L*.5, z + dir.z*L*.5);
+    scene.add(br);
+  }
+  /* Krone: ein Kernvolumen plus unregelmaessig auf seiner Oberflaeche verteilte Blattballen */
+  var blobs = [], cy0, kx, ky, n;
+  if(type === "round"){ cy0 = th + 1.3*s; kx = 1.2*s; ky = 1.0*s; n = 11 + (rnd()*3|0); }
+  else { cy0 = th + 1.9*s; kx = .72*s; ky = 1.75*s; n = 9 + (rnd()*3|0); }
+  blobs.push({x:x, y:cy0, z:z, rx:kx, ry:ky, rz:kx, amp:.14, seed:rnd()*9, c:.9, d:2});
+  for(var i=0; i<n; i++){
+    var th2 = rnd()*Math.PI*2, ph2 = Math.acos(1 - 1.6*rnd());
+    var dxs = Math.sin(ph2)*Math.cos(th2), dys = Math.cos(ph2), dzs = Math.sin(ph2)*Math.sin(th2);
+    var r = (type === "round" ? (.45 + rnd()*.35) : (.38 + rnd()*.25))*s;
+    blobs.push({x:x + dxs*kx*.85, y:cy0 + dys*ky*.8, z:z + dzs*kx*.85,
+                rx:r, ry:r*.88, rz:r, amp:.22, seed:rnd()*9, c:.85 + rnd()*.3 + dys*.08, d:2});
+  }
+  var tints = [[1, 1, 1], [.95, 1, .88], [1.06, 1.03, .9], [.9, .97, .95]];
+  foliage(blobs, tints[(rnd()*tints.length)|0], true);
+}
+/* Strauch: lockerer, niedriger Busch */
+function shrub(x, z, s){
+  s = s || 1;
+  var rnd = mulberry(Math.floor(x*211 + z*577 + 3)), bl = [], n = 5 + (rnd()*2|0);
+  for(var i=0; i<n; i++){
+    var a = i/n*Math.PI*2 + rnd()*.6, rad = (.3 + rnd()*.25)*s, r = (.38 + rnd()*.22)*s;
+    bl.push({x:x + Math.cos(a)*rad, y:r*.75, z:z + Math.sin(a)*rad, rx:r, ry:r*.85, rz:r, amp:.2, seed:rnd()*9, c:.85 + rnd()*.3, d:1});
+  }
+  bl.push({x:x, y:.55*s, z:z, rx:.45*s, ry:.4*s, rz:.45*s, amp:.2, seed:rnd()*9, c:1.05, d:1});
+  foliage(bl, [1, 1.02, .9], true);
+}
+for(var tb=-55; tb<70; tb+=13){ tree(tb, -33.5, 1 + ((tb*7 + 100) % 13)/43, "round"); }   /* Strassenbaeume: Linden */
+tree(-1.5, 19.2, .95); tree(9.6, 19.9, .9); tree(12.4, 19.7, .85);
+tree(25.6, -4, .7);
+tree(-25, -18, .85); tree(-25, -9, .8);
+tree(-5, -17.1, .95); tree(-13.5, -17.1, .85);
+tree(19, -18.3, .9);
+/* Hecke: geschnittener Kern (Quader mit Blatt-Textur) plus dicht ueberlappende Blattballen,
+   dadurch weitgehend gerade Flanken und Oberkante mit leichtem, natuerlichem Relief */
+function hedge(w, d, x, z, hgt){
+  hgt = hgt || .75;
+  var alongX = w >= d, L = alongX ? w : d, Wd = alongX ? d : w;
+  var rnd = mulberry(Math.floor(x*311 + z*733 + L*17)), bl = [];
+  var cg = new THREE.BoxGeometry(alongX ? L - .15 : Wd*.9, hgt*.92, alongX ? Wd*.9 : L - .15);
+  var cp = cg.attributes.position, cn = cg.attributes.normal, cu = cg.attributes.uv;
+  for(var q=0; q<cp.count; q++){                  /* Textur in Metern statt gestreckt ueber die ganze Laenge */
+    var ax = Math.abs(cn.getX(q)), ay = Math.abs(cn.getY(q));
+    var u = ax > .5 ? cp.getZ(q) : cp.getX(q), v = ay > .5 ? cp.getZ(q) : cp.getY(q);
+    cu.setXY(q, u/.7, v/.7);
+  }
+  var core = new THREE.Mesh(cg, M.hedgeCore);
+  core.position.set(x, hgt*.46, z); core.castShadow = true; core.receiveShadow = true; scene.add(core);
+  var n = Math.max(3, Math.round(L/.38));
+  for(var i=0; i<n; i++){
+    var t = -L/2 + (i + .5)*L/n;
+    var ra = .5 + rnd()*.15, rc = Wd/2 + rnd()*.04, rh = hgt/2 + rnd()*.04;
+    bl.push({x: alongX ? x + t : x + (rnd()-.5)*.04, y: hgt/2, z: alongX ? z + (rnd()-.5)*.04 : z + t,
+             rx: alongX ? ra : rc, ry: rh, rz: alongX ? rc : ra, amp:.08, seed:rnd()*9, c:.92 + rnd()*.16, d:1});
+  }
+  foliage(bl, [.92, 1, .9], true);
+}
+hedge(3,.8,-11.5,-18.5); hedge(3,.8,-4.5,-18.5); hedge(.8,3,26.1,.5);
+hedge(3,.8,-11.9,1.9); hedge(3,.8,-4.1,1.9);
+hedge(4,.8,14.6,18.6);
+hedge(.8, 4.3, 3.2, 3.45, .6);                  /* niedrige Hecke zwischen Drive-in-Spur und Platz am Ueberweg */
+/* Straeucher in den Gruenflaechen */
+shrub(-18, 18.8, 1); shrub(-12.5, 19.6, .9); shrub(-7.5, 18.4, .8);
+shrub(15.5, 19.3, .9); shrub(20.5, 18, 1); shrub(22.8, 12.5, .85);
+shrub(-15.2, -3, .7); shrub(-15.2, -10.8, .7);
+function person(x, z, ry, col, y){
+  var g = new THREE.Group(); g.position.set(x, y||0, z); g.rotation.y = ry||0; scene.add(g);
+  var b = new THREE.Mesh(new THREE.CylinderGeometry(.16,.2,1.15,10),
+    new THREE.MeshStandardMaterial({color:col||0x37414a, roughness:.8}));
+  b.position.y = .78; b.castShadow = true; g.add(b);
+  var hd = new THREE.Mesh(new THREE.SphereGeometry(.14,10,8),
+    new THREE.MeshStandardMaterial({color:0xc8a084, roughness:.8}));
+  hd.position.y = 1.52; g.add(hd);
+  return g;
+}
+function chefHat(g){                       /* weisse Kochmuetze: Band und gepuffter Oberteil */
+  var hm = new THREE.MeshStandardMaterial({color:0xf7f6f2, roughness:.85});
+  var band = new THREE.Mesh(new THREE.CylinderGeometry(.135, .14, .09, 16), hm); band.position.y = 1.63; g.add(band);
+  var top = new THREE.Mesh(new THREE.CylinderGeometry(.17, .13, .2, 16), hm); top.position.y = 1.77; g.add(top);
+  var puff = new THREE.Mesh(new THREE.SphereGeometry(.17, 16, 10, 0, Math.PI*2, 0, Math.PI/2), hm);
+  puff.scale.y = .55; puff.position.y = 1.87; g.add(puff);
+}
+person(-8.35, 13.4, -1.4, 0x555c64);     /* Gast steigt neben seinem Auto ein */
+person(-7.3, -1.9, 0, 0x2f3b33, EG);    /* Barista am Tresen */
+person(-8.1, 1.45, 0, 0x2f3b33, EG);    /* Barista im Ausgabeerker */
+chefHat(person(12.9, -3.85, 0, 0xeeeae2, RF));   /* Koeche am Grill, mit Kochmuetze */
+chefHat(person(15.7, -3.95, 0, 0xeeeae2, RF));
+
+/* ---------- Gaeste: sitzende Figuren an Tischen, Bar und Lounge, alle zum Tisch gewandt ----------
+   je Gebaeude zu einem einzigen Mesh zusammengefasst, damit es auch auf dem iPhone fluessig bleibt */
+function GuestSet(){ this.pos = []; this.nor = []; this.col = []; }
+GuestSet.prototype.add = function(geo, hex, mtx){
+  var g = geo.index ? geo.toNonIndexed() : geo.clone();
+  g.applyMatrix4(mtx);
+  var p = g.attributes.position.array, n = g.attributes.normal.array, c = new THREE.Color(hex), i;
+  c.lerp(c.clone().convertSRGBToLinear(), .55);   /* Kleidung und Haut etwas satter, nicht pastellig */
+  for(i=0; i<p.length; i++){ this.pos.push(p[i]); this.nor.push(n[i]); }
+  for(i=0; i<p.length/3; i++){ this.col.push(c.r, c.g, c.b); }
+};
+GuestSet.prototype.build = function(){
+  var g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.Float32BufferAttribute(this.pos, 3));
+  g.setAttribute("normal", new THREE.Float32BufferAttribute(this.nor, 3));
+  g.setAttribute("color", new THREE.Float32BufferAttribute(this.col, 3));
+  var m = new THREE.Mesh(g, new THREE.MeshStandardMaterial({vertexColors:true, roughness:.8}));
+  m.receiveShadow = true; scene.add(m); return m;
+};
+var G_BOX = new THREE.BoxGeometry(1, 1, 1), G_TORSO = new THREE.CylinderGeometry(.16, .18, .52, 12),
+    G_NECK = new THREE.CylinderGeometry(.05, .05, .1, 8), G_HEAD = new THREE.SphereGeometry(.11, 12, 10),
+    G_HAIR = new THREE.SphereGeometry(.118, 12, 8, 0, Math.PI*2, 0, Math.PI*.58);
+var G_TOPS = [0x2f4a6b, 0x8a3b2e, 0xd6cfbf, 0x3e5c45, 0x5b4a7a, 0xa8742e, 0x1f2328, 0x6f8aa6, 0x7a2f45, 0x3a3f46, 0x4e6f8f, 0x8c7a5c, 0x26453f, 0x5c2a2a];
+var G_LEGS = [0x23272e, 0x3b4250, 0x4a3f35, 0x1c2a3d, 0x6b6258, 0x2e2a26];
+var G_SKIN = [0xe8c4a6, 0xd6a882, 0xb07c58, 0x8a5a3c, 0xf0d2bc, 0xc99a74];
+var G_HAIRC = [0x2a1d14, 0x5a3a22, 0x8a6a3a, 0x1a1a1a, 0xb9a27a, 0x6b6b6b, 0x3b2a20];
+var gRnd = mulberry(4893), gBase = new THREE.Matrix4(), gLoc = new THREE.Matrix4(), gOut = new THREE.Matrix4(),
+    gQ = new THREE.Quaternion(), gE = new THREE.Euler(), gP = new THREE.Vector3(), gS = new THREE.Vector3();
+function pick(a){ return a[Math.floor(gRnd()*a.length)]; }
+/* o.sh: Sitzhoehe, o.foot: Hoehe der Fuesse, o.ay: Tischhoehe (Unterarme auf dem Tisch) oder leer (Haende im Schoss),
+   o.lean: Neigung des Oberkoerpers (+ zurueckgelehnt). Blickrichtung lokal -z wie bei den Stuehlen */
+function guest(set, x, y, z, ry, o){
+  var top = pick(G_TOPS), legs = pick(G_LEGS), skin = pick(G_SKIN), hair = pick(G_HAIRC), shoe = 0x1b1b1d;
+  var sh = o.sh, ft = o.foot || 0, ln = o.lean || 0;
+  gBase.compose(gP.set(x, y, z), gQ.setFromEuler(gE.set(0, ry, 0)), gS.set(1, 1, 1));
+  function part(geo, hex, px, py, pz, sx, sy, sz, rx){
+    gLoc.compose(gP.set(px, py, pz), gQ.setFromEuler(gE.set(rx || 0, 0, 0)), gS.set(sx, sy, sz));
+    set.add(geo, hex, gOut.multiplyMatrices(gBase, gLoc));
+  }
+  [-.1, .1].forEach(function(dx){
+    part(G_BOX, legs, dx, sh + .065, -.1, .14, .13, .44);
+    part(G_BOX, legs, dx, (sh + ft)/2, -.31, .12, sh - ft, .12);
+    part(G_BOX, shoe, dx, ft + .035, -.37, .11, .07, .23);
+  });
+  part(G_BOX, legs, 0, sh + .08, .01, .36, .15, .26);
+  part(G_TORSO, top, 0, sh + .41, .0 + ln*.26, 1, 1, 1, ln);
+  part(G_BOX, top, 0, sh + .66, .01 + ln*.5, .42, .1, .2);
+  part(G_NECK, skin, 0, sh + .74, .01 + ln*.6, 1, 1, 1);
+  part(G_HEAD, skin, 0, sh + .86, .0 + ln*.7, 1, 1, 1);
+  part(G_HAIR, hair, 0, sh + .875, .02 + ln*.7, 1, 1, 1);
+  [-.22, .22].forEach(function(dx){
+    if(o.ay !== undefined){
+      part(G_BOX, top, dx, sh + .5, -.04, .09, .3, .1, .3);
+      part(G_BOX, top, dx*.85, o.ay + .04, -.2, .085, .085, .32);
+      part(G_BOX, skin, dx*.85, o.ay + .04, -.39, .07, .05, .08);
+    } else {
+      part(G_BOX, top, dx, sh + .48 + ln*.1, .03 + ln*.3, .09, .32, .1, .1 + ln);
+      part(G_BOX, top, dx*.8, sh + .2, -.15, .085, .085, .28);
+      part(G_BOX, skin, dx*.8, sh + .2, -.32, .07, .05, .08);
+    }
+  });
+}
+var CHAIR = {sh:.5, ay:.775, lean:-.06};
+
+/* Restaurant: Vierertische, Lederbank, Fenstertisch, grosser Tisch, Bar */
+(function(){
+  var S = new GuestSet();
+  function atTable(tx, tz, offs){
+    offs.forEach(function(o){ var cx = tx + o[0], cz = tz + o[1]; guest(S, cx, RF, cz, faceTo(cx, cz, tx, tz), CHAIR); });
+  }
+  var W = [-.68, 0], E = [.68, 0], Sd = [0, -.68], N = [0, .68];
+  atTable(7.8, -13.3, [W, E, Sd, N]); atTable(7.8, -10.5, [W, E]);
+  atTable(10.3, -13.3, [Sd, N]);      atTable(10.3, -10.5, [W, E, N]); atTable(10.3, -7.7, [W, E]);
+  atTable(14.6, -10.5, [W, E, Sd, N]); atTable(14.6, -7.7, [Sd, N]);
+  [-14.0, -10.4, -8.6, -6.8].forEach(function(z, i){                   /* Lederbank: Gast auf der Bank, Gegenueber auf dem Stuhl */
+    guest(S, 3.7, RF, z, faceTo(3.7, z, 4.62, z), CHAIR);
+    if(i !== 2) guest(S, 5.32, RF, z, faceTo(5.32, z, 4.62, z), CHAIR);
+  });
+  guest(S, 15.98, RF, -14.6, faceTo(15.98, -14.6, 16.6, -14.6), CHAIR);
+  guest(S, 17.22, RF, -14.6, faceTo(17.22, -14.6, 16.6, -14.6), CHAIR);
+  [[-.85, -.72], [0, -.72], [.85, -.72], [-.85, .72], [.85, .72], [-1.62, 0]].forEach(function(o){   /* grosser Tisch */
+    var cx = 6.1 + o[0], cz = -3.8 + o[1]; guest(S, cx, RF, cz, faceTo(cx, cz, 6.1 + (o[1] ? o[0] : 0), -3.8), CHAIR);
+  });
+  [-11.2, -10.4, -8.0].forEach(function(z){                              /* Bar */
+    guest(S, 17.9, RF, z, faceTo(17.9, z, 18.6, z), {sh:.79, foot:.3, ay:1.1, lean:-.04});
+  });
+  S.build();
+})();
+
+/* Espresso House: Bistrotische, Fensterbar, Stehsitzbank (EG), Lounge, Tische, Gemeinschaftstisch, Sofaecke (OG) */
+(function(){
+  var S = new GuestSet();
+  guest(S, -11.15, EG, -8.4, faceTo(-11.15, -8.4, -10.4, -8.4), CHAIR);
+  guest(S, -9.65, EG, -8.4, faceTo(-9.65, -8.4, -10.4, -8.4), CHAIR);
+  guest(S, -11.15, EG, -5.8, faceTo(-11.15, -5.8, -10.4, -5.8), CHAIR);
+  [-6.2, -4.4].forEach(function(x){ guest(S, x, EG, -10.98, 0, {sh:.79, foot:.3, ay:1.105, lean:-.04}); });
+  [-8.5, -5.7].forEach(function(z){ guest(S, -2.45, EG, z, faceTo(-2.45, z, -3.3, z), {sh:.75, foot:.3, lean:.04}); });
+  /* Lounge-Gruppen: Sofa (zwei Plaetze) und Sessel, zurueckgelehnt */
+  var LOUNGE = {sh:.47, lean:.14}, ARM = {sh:.44, lean:.12};
+  [[-5.6, [.5, -.5], [1]], [-10.2, [.5], [-1]]].forEach(function(gp){
+    var cx = gp[0], ry = faceTo(cx, -10.75, cx, -9.4);
+    gp[1].forEach(function(lx){ guest(S, cx + lx*Math.cos(ry), OGY, -10.75 - lx*Math.sin(ry), ry, LOUNGE); });
+    gp[2].forEach(function(s){ var ax = cx + s*1.3; guest(S, ax, OGY, -9.0, faceTo(ax, -9.0, cx, -9.4), ARM); });
+  });
+  [[-9.6, [[0, -.78], [0, .78]]], [-6.1, [[-.78, 0], [.78, 0], [0, -.78]]]].forEach(function(t){
+    t[1].forEach(function(o){ var cx = t[0] + o[0], cz = -5.9 + o[1]; guest(S, cx, OGY, cz, faceTo(cx, cz, t[0], -5.9), {sh:.5, ay:.75, lean:-.06}); });
+  });
+  [[-8.95, -2.25], [-8.05, -.55], [-6.25, -2.25], [-6.25, -.55]].forEach(function(p){
+    guest(S, p[0], OGY, p[1], faceTo(p[0], p[1], p[0], -1.4), {sh:.5, ay:.765, lean:-.06});
+  });
+  var ry = faceTo(-2.72, -6.0, -4.0, -6.0);
+  guest(S, -2.72 - .5*Math.cos(ry), OGY, -6.0 + .5*Math.sin(ry), ry, LOUNGE);
+  S.build();
+})();
+person(16.25, -5.75, Math.PI, 0x2b2622, RF);  /* Service holt am Pass ab */
+person(19.6, -9.6, 0, 0x2b2622, RF);    /* Barkeeper */
+person(3.0, 18.4, 2.6, 0x3a4a5e);
+[[-15.3,-13.6],[-5.5,-14.25],[-3,-14.25],[3.6,-18.7],[10.4,-18.7],[13.6,-18.7],[20.4,-18.7]].forEach(function(p){
+  box(.09,.75,.09,M.steel,p[0],.38,p[1]);
+  var lamp = new THREE.Mesh(new THREE.SphereGeometry(.07,8,6), M.warm);
+  lamp.position.set(p[0],.8,p[1]); scene.add(lamp);
+});
+[[-20,-24.3],[24,-24.3]].forEach(function(p){
+  box(.14, 7, .14, M.steel, p[0], 3.5, p[1]);
+  box(1.6, .1, .12, M.steel, p[0]+.7, 6.95, p[1]);
+  var head = new THREE.Mesh(new THREE.SphereGeometry(.16,8,6), M.warm);
+  head.position.set(p[0]+1.4, 6.85, p[1]); scene.add(head);
+});
+
+/* ---------- Labels ---------- */
+var labels = [];
+function label(text, x, y, z, col){
+  var cw = 64 + text.length*30;
+  var t = makeTex(cw, 84, function(ctx,w,h){
+    ctx.fillStyle = "rgba(14,18,17,.85)";
+    ctx.beginPath();
+    if(ctx.roundRect){ ctx.roundRect(2,2,w-4,h-24,14); } else { ctx.rect(2,2,w-4,h-24); }
+    ctx.fill();
+    ctx.strokeStyle = col; ctx.lineWidth = 3; ctx.stroke();
+    ctx.fillStyle = col;
+    ctx.beginPath(); ctx.moveTo(w/2-10,h-24); ctx.lineTo(w/2+10,h-24); ctx.lineTo(w/2,h-2); ctx.fill();
+    ctx.fillStyle = "#eef1f0"; ctx.font = "600 30px 'Avenir Next','Segoe UI',sans-serif";
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText(text, w/2, (h-22)/2+2);
+  });
+  var sp = new THREE.Sprite(new THREE.SpriteMaterial({map:t, depthTest:false}));
+  sp.scale.set(cw/62, 84/62, 1);
+  sp.position.set(x,y,z);
+  sp.renderOrder = 5;
+  scene.add(sp); labels.push(sp);
+}
+label("Restaurant · 1 Geschoss", 12, 7.6, -9, "#c07a63");
+label("Café + Drive-in · 2 Geschosse", -8, 11.6, -5.5, "#7fa8c9");
+label("Drive-in-Einfahrt", -18, 4.6, -10, "#e8b45a");
+label("Ausfahrt", 23.2, 4.2, -11, "#c9ccce");
+label("11 Pkw-Stellplätze", -9.5, 4.6, 14.0, "#c9ccce");
+label("12 E-Ladeplätze", 12.5, 4.8, 5, "#49c26e");
+label("Fahrradstellplätze", 5.15, 4.2, 19.5, "#6fb0e0");
+label("Zufahrt Parkplatz", -21.4, 3.0, -15, "#c9ccce");
+label("Grünfläche", -12, 4.8, 19.4, "#69b04c");
+label("Friedrich-Ebert-Damm", -6, 3.4, -26, "#9aa4ad");
+label("Berner Heerweg", 33.5, 3.6, 18, "#9aa4ad");
+
+/* ================= Umgebung: Nachbarbebauung, Strassen, Grundstuecksgrenze ================= */
+var nbSolids = [];
+var roofMat = new THREE.MeshStandardMaterial({color:0x323538, roughness:1});
+
+/* Strassen verlaengern, Gehwege auf beiden Seiten */
+flat(60, 9, M.road, -110, .03, -26);
+flat(60, 9, M.road, 130, .03, -26);
+for(var hm=-140; hm<-70; hm+=7){ flat(3.2,.3,M.white,hm,.05,-26); }
+for(var hm2=84; hm2<160; hm2+=7){ flat(3.2,.3,M.white,hm2,.05,-26); }
+flat(9, 45, M.road, 33.5, .03, -62.5);
+flat(9, 45, M.road, 33.5, .03, 92.5);
+for(var bm=-35; bm>-86; bm-=7){ flat(.3,3.2,M.white,33.5,.05,bm); }
+for(var bm2=70; bm2<115; bm2+=7){ flat(.3,3.2,M.white,33.5,.05,bm2); }
+flat(60, 2.6, M.concrete, -110, .04, -20.2);          /* Gehweg Suedseite Friedrich-Ebert-Damm */
+flat(60, 2.6, M.concrete, 130, .04, -20.2);
+flat(167.3, 2.6, M.concrete, -56.35, .04, -31.8);     /* Gehweg Nordseite Friedrich-Ebert-Damm */
+flat(122, 2.6, M.concrete, 99, .04, -31.8);
+flat(2.6, 47, M.concrete, 28.6, .04, -61.5);          /* Gehweg Berner Heerweg West */
+flat(2.6, 53, M.concrete, 28.6, .04, 88.5);
+flat(2.6, 51.9, M.concrete, 39.3, .04, -59.05);       /* Gehweg Berner Heerweg Ost */
+flat(2.6, 133.9, M.concrete, 39.3, .04, 48.05);
+
+/* Fassaden der Bestandsgebaeude: Fensterraster, teils beleuchtet */
+function facadeMat(cols, floors, style){
+  var cw = Math.min(64, Math.floor(1024/cols)), fh = Math.min(96, Math.floor(1024/floors));
+  var W = cols*cw, H = floors*fh;
+  var cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+  var ev = document.createElement("canvas"); ev.width = W; ev.height = H;
+  var c = cv.getContext("2d"), e = ev.getContext("2d");
+  e.fillStyle = "#000"; e.fillRect(0, 0, W, H);
+  c.fillStyle = {office:"#686c70", brick:"#4c3630", hall:"#555b61", showroom:"#7c838a"}[style];
+  c.fillRect(0, 0, W, H);
+  if(style === "brick"){
+    c.fillStyle = "rgba(20,12,10,.35)";
+    for(var by=0; by<H; by+=5){ c.fillRect(0, by, W, 1); }
+  }
+  if(style === "hall"){
+    c.fillStyle = "rgba(0,0,0,.25)";
+    for(var vx=0; vx<W; vx+=6){ c.fillRect(vx, 0, 2, H); }
+  }
+  noise(c, W, H, Math.floor(W*H/50), .06);
+  function pane(x, y, w, h, p, warm){
+    var lit = Math.random() < p;
+    c.fillStyle = lit ? (warm ? "#d8c39c" : "#c9d4e2") : "#18212a";
+    c.fillRect(x, y, w, h);
+    if(lit){
+      e.globalAlpha = .55 + Math.random()*.45;
+      e.fillStyle = warm ? "#ffc887" : "#dde8ff";
+      e.fillRect(x, y, w, h);
+      e.globalAlpha = 1;
+    }
+  }
+  for(var f=0; f<floors; f++){
+    var y0 = H - (f+1)*fh;
+    if(style === "office"){ c.fillStyle = "rgba(0,0,0,.25)"; c.fillRect(0, y0+fh*.86, W, fh*.06); }
+    for(var i=0; i<cols; i++){
+      var x0 = i*cw;
+      if(style === "office"){
+        pane(x0+cw*.05, y0+fh*.2, cw*.9, fh*.58, .4, Math.random() < .55);
+      } else if(style === "brick"){
+        pane(x0+cw*.27, y0+fh*.18, cw*.46, fh*.56, .33, true);
+        c.fillStyle = "#6b5a50"; c.fillRect(x0+cw*.24, y0+fh*.74, cw*.52, fh*.05);
+      } else if(style === "hall"){
+        if(f === floors-1) pane(x0+cw*.06, y0+fh*.1, cw*.88, fh*.2, .6, false);
+        if(f === 0 && i % 3 === 1){
+          c.fillStyle = "#80878d"; c.fillRect(x0+cw*.08, y0+fh*.32, cw*.84, fh*.68);
+          c.fillStyle = "rgba(0,0,0,.25)";
+          for(var rl=y0+fh*.32; rl<y0+fh; rl+=4){ c.fillRect(x0+cw*.08, rl, cw*.84, 1); }
+        }
+      } else if(style === "showroom"){
+        if(f === 0){
+          c.fillStyle = "#cdd8e6"; c.fillRect(x0+2, y0+fh*.06, cw-4, fh*.94);
+          e.globalAlpha = .9; e.fillStyle = "#eef4ff"; e.fillRect(x0+2, y0+fh*.06, cw-4, fh*.94); e.globalAlpha = 1;
+        } else {
+          pane(x0+cw*.05, y0+fh*.74, cw*.9, fh*.14, .35, false);
+        }
+      }
+    }
+  }
+  var tm = new THREE.CanvasTexture(cv), te = new THREE.CanvasTexture(ev);
+  tm.anisotropy = 4; te.anisotropy = 4;
+  return new THREE.MeshStandardMaterial({map:tm, emissiveMap:te, emissive:0xffffff, emissiveIntensity:.8, roughness:.85});
+}
+function neighbor(o){
+  var cW = Math.max(2, Math.round(o.w/3.3)), cD = Math.max(2, Math.round(o.d/3.3));
+  var mW = facadeMat(cW, o.floors, o.style), mD = facadeMat(cD, o.floors, o.style);
+  var b = new THREE.Mesh(new THREE.BoxGeometry(o.w, o.h, o.d), [mD, mD, roofMat, roofMat, mW, mW]);
+  b.position.set(o.x, o.h/2, o.z); b.castShadow = true; b.receiveShadow = true; scene.add(b);
+  box(o.w+.3, .4, o.d+.3, roofMat, o.x, o.h+.15, o.z);                    /* Attika */
+  box(2.2, 1.1, 1.8, M.steel, o.x - o.w*.22, o.h+.85, o.z + o.d*.18);       /* Dachtechnik */
+  box(1.6, .8, 3, M.steel, o.x + o.w*.2, o.h+.7, o.z - o.d*.2);
+  nbSolids.push({x1:o.x-o.w/2, x2:o.x+o.w/2, z1:o.z-o.d/2, z2:o.z+o.d/2});
+}
+function nbSign(text, x, y, z, ry, w){
+  var s = new THREE.Mesh(new THREE.PlaneGeometry(w, w*.195),
+    new THREE.MeshBasicMaterial({map:signTex(text, "#0f1720", "#dfe9f5", 92)}));
+  s.position.set(x, y, z); s.rotation.y = ry; scene.add(s);
+}
+var nbCol = [0x9aa0a6, 0x1f2328, 0xd8d8d4, 0x51262a, 0x2c4058, 0x6a6e64, 0xb4b8bc, 0x3b3f45];
+var nbCarIdx = 0;
+function nbCar(x, z, ry){
+  var cc = makeCar(nbCol[nbCarIdx++ % nbCol.length]);
+  cc.position.set(x, 0, z); cc.rotation.y = ry;
+}
+function hedgeLine(x1, z1, x2, z2){
+  var L = Math.hypot(x2-x1, z2-z1);
+  if(Math.abs(x2 - x1) >= Math.abs(z2 - z1)) hedge(L, .8, (x1+x2)/2, (z1+z2)/2, .9);
+  else hedge(.8, L, (x1+x2)/2, (z1+z2)/2, .9);
+}
+function streetLamp(x, z, ax, az){
+  box(.14, 7, .14, M.steel, x, 3.5, z);
+  box(ax ? 1.6 : .12, .1, az ? 1.6 : .12, M.steel, x + ax*.7, 6.95, z + az*.7);
+  var hd = new THREE.Mesh(new THREE.SphereGeometry(.16,8,6), M.warm);
+  hd.position.set(x + ax*1.4, 6.85, z + az*1.4); scene.add(hd);
+}
+
+/* Norden, jenseits des Friedrich-Ebert-Damms (Flurstueck 4894): KFZ-Center mit Ausstellungsflaeche */
+neighbor({x:-9, z:-56, w:30, d:16, h:8, floors:2, style:"showroom"});
+flat(34, 9, M.road, -9, .08, -42.5);
+flat(6, 7.5, M.road, -8, .07, -34.25);
+nbCar(-21, -42.5, -Math.PI/2); nbCar(-16.5, -42.5, -Math.PI/2);
+nbCar(-1, -42.5, -Math.PI/2); nbCar(3.5, -42.5, -Math.PI/2);
+flat(16, 14, M.road, 19, .08, -47);                   /* Ausstellungsflaeche Gebrauchtwagen */
+flat(6, 7, M.road, 17, .07, -36.5);
+[14, 17.5, 21, 24.5].forEach(function(cx){ nbCar(cx, -44, -Math.PI/2); nbCar(cx, -50.5, -Math.PI/2); });
+neighbor({x:-50, z:-53, w:32, d:18, h:9, floors:2, style:"hall"});
+flat(32, 8, M.road, -50, .08, -39.5);
+flat(6, 5, M.road, -50, .07, -33);
+nbCar(-58, -39.5, 0);
+neighbor({x:57, z:-54, w:26, d:20, h:11.5, floors:3, style:"office"});
+flat(26, 8, M.road, 57, .08, -39.5);
+flat(6, 5, M.road, 57, .07, -33);
+nbCar(50, -40, Math.PI/2); nbCar(64, -40, Math.PI/2);
+
+/* Westen (Flurstueck 4784): Autohaus */
+neighbor({x:-48, z:-4, w:20, d:20, h:8, floors:2, style:"showroom"});
+flat(30, 4.8, M.road, -43.5, .08, -16.5);
+flat(8.5, 20, M.road, -33.5, .08, -4);
+flat(6, 2.6, M.road, -33, .07, -20.2);
+nbCar(-54, -16.4, Math.PI/2 + .45); nbCar(-49, -16.4, Math.PI/2 + .45); nbCar(-44, -16.4, Math.PI/2 + .45);
+nbCar(-33.5, -11.2, Math.PI); nbCar(-33.5, -6.2, Math.PI); nbCar(-33.5, 1.3, Math.PI);
+
+/* Sueden (Flurstuecke 4783, 1867, 5527/5528): Bestand III-geschossig */
+neighbor({x:-41, z:29, w:22, d:18, h:10.5, floors:3, style:"brick"});
+neighbor({x:-2, z:45, w:24, d:14, h:10.5, floors:3, style:"office"});
+flat(26, 6, M.road, -2, .08, 33.5);
+flat(18, 4, M.road, 20, .07, 33.5);
+nbCar(-11, 33.5, -Math.PI/2); nbCar(-6.5, 33.5, -Math.PI/2); nbCar(6, 33.5, -Math.PI/2);
+neighbor({x:19.5, z:49, w:13, d:18, h:10.5, floors:3, style:"brick"});
+
+/* Osten, jenseits des Berner Heerwegs: Gewerbehalle + Buero */
+neighbor({x:59, z:-2, w:30, d:28, h:9, floors:2, style:"hall"});
+flat(3.4, 28, M.road, 42.3, .07, -2);
+nbCar(42.3, 4, Math.PI/2);
+neighbor({x:54, z:31, w:20, d:18, h:14, floors:4, style:"office"});
+
+/* Grundstuecksgrenze zu den Nachbarn (Westen, Sueden): Hecken entlang des Rechtecks */
+hedgeLine(-23.65, -18.5, -23.65, 21.93);
+hedgeLine(-23.65, 21.93, 25.25, 21.93);
+
+/* Gruen und Laternen in der Umgebung */
+tree(-62, -18, .9); tree(-29, -57, .95); tree(9, -58, .85);
+tree(-26, 34, .9); tree(-17, 26, .85); tree(66, 18, .9);
+tree(4, 60, .9); tree(-60, 14, .9);
+streetLamp(-36, -30.9, 0, 1); streetLamp(-23, -30.9, 0, 1); streetLamp(44, -30.9, 0, 1); streetLamp(76, -30.9, 0, 1);
+streetLamp(39.8, 0, -1, 0); streetLamp(39.8, 34, -1, 0);
+
+
+/* ================= Steuerung ================= */
+var mode = "orbit";
+var target = new THREE.Vector3(0, 3.5, -7);
+var sph = {r: 42, th: 2.85, ph: 1.40};
+var walk = {pos: new THREE.Vector3(-8, 1.65, -17), yaw: Math.PI, pitch: -.03};
+var keys = {};
+var joyVec = {x:0, y:0};
+
+function applyOrbit(){
+  sph.ph = Math.max(.12, Math.min(1.49, sph.ph));
+  sph.r = Math.max(9, Math.min(260, sph.r));
+  camera.position.set(
+    target.x + sph.r * Math.sin(sph.ph) * Math.sin(sph.th),
+    target.y + sph.r * Math.cos(sph.ph),
+    target.z + sph.r * Math.sin(sph.ph) * Math.cos(sph.th)
+  );
+  camera.lookAt(target);
+}
+function applyWalk(){
+  walk.pitch = Math.max(-1.2, Math.min(1.2, walk.pitch));
+  camera.position.copy(walk.pos);
+  camera.rotation.set(0,0,0);
+  camera.rotateY(walk.yaw);
+  camera.rotateX(walk.pitch);
+}
+
+var solids = [].concat(nbSolids);
+/* Restaurant: Waende mit Tueroeffnung, Stuetzen, Kueche, Bar, Tische (alles fuer den Rundgang) */
+var colRest = [
+  {x1:2.8, x2:10.55, z1:-16.2, z2:-15.85}, {x1:13.45, x2:21.2, z1:-16.2, z2:-15.85},
+  {x1:20.85, x2:21.2, z1:-16.2, z2:-1.8}, {x1:2.8, x2:3.15, z1:-16.2, z2:-1.8}, {x1:2.8, x2:21.2, z1:-2.15, z2:-1.8},
+  {x1:2.97, x2:3.83, z1:-16.03, z2:-15.17}, {x1:20.17, x2:21.03, z1:-16.03, z2:-15.17},
+  {x1:2.97, x2:3.83, z1:-2.83, z2:-1.97}, {x1:20.17, x2:21.03, z1:-2.83, z2:-1.97},
+  {x1:9.0, x2:20.8, z1:-5.4, z2:-2.1},                       /* Kueche mit Ausgabetheke */
+  {x1:17.7, x2:20.8, z1:-12.9, z2:-5.4},                     /* Bar mit Hockern */
+  {x1:3.15, x2:5.56, z1:-14.95, z2:-5.85},                   /* Lederbank mit Zweiertischen */
+  {x1:4.2, x2:7.98, z1:-4.78, z2:-2.8},                      /* grosser Tisch */
+  {x1:15.76, x2:17.44, z1:-14.85, z2:-14.35}, {x1:18.36, x2:20.04, z1:-14.85, z2:-14.35},
+  {x1:9.12, x2:10.08, z1:-15.25, z2:-14.75},                 /* Empfangspult */
+  {x1:15.95, x2:16.55, z1:-6.05, z2:-5.45},                  /* Service am Pass */
+  {x1:3.75, x2:4.25, z1:-15.55, z2:-15.05}, {x1:13.85, x2:14.35, z1:-15.5, z2:-15.0},
+  {x1:3.55, x2:4.05, z1:-3.0, z2:-2.5}, {x1:8.3, x2:8.8, z1:-3.0, z2:-2.5}
+];
+[7.8, 10.3, 14.6].forEach(function(x){ [-13.3, -10.5, -7.7].forEach(function(z){
+  colRest.push({x1:x - .92, x2:x + .92, z1:z - .92, z2:z + .92});
+}); });
+/* Rundgang: Ebenen (0 = Gelaende/EG, 1 = OG im Cafe), Treppe als Rampe, Kollision mit Waenden und Moebeln */
+var walkLevel = 0;
+function hits(list, x, z, m){
+  for(var i=0; i<list.length; i++){
+    var s = list[i];
+    if(x > s.x1-m && x < s.x2+m && z > s.z1-m && z < s.z2+m) return true;
+  }
+  return false;
+}
+function onStair(x, z){ return x > ST.x1 && x < ST.x2 && z > ST.z1 && z < ST.z2; }
+function stairY(z){ return ST.y0 + (z - ST.z1)/(ST.z2 - ST.z1)*(ST.y1 - ST.y0); }
+function insideCafe(x, z){ return x > -14 && x < -2 && z > -12 && z < 1; }
+function insideRest(x, z){ return x > 3 && x < 21 && z > -16 && z < -2; }
+function levelAt(x, z){
+  if(onStair(walk.pos.x, walk.pos.z) && !onStair(x, z)) return z >= ST.z2 ? 1 : 0;
+  return walkLevel;
+}
+function blocked(x, z, lvl){
+  if(onStair(x, z)) return hits(stairCol, x, z, .28);
+  if(lvl === 1) return hits(colOG, x, z, .28);
+  return hits(solids, x, z, .4) || hits(colEG, x, z, .28) || hits(colRest, x, z, .28);
+}
+function walkStep(dt, kk, jv){
+  var sp = (kk.ShiftLeft || kk.ShiftRight) ? 8 : 4;
+  var mx = 0, fw = 0;
+  if(kk.KeyW || kk.ArrowUp) fw += 1;
+  if(kk.KeyS || kk.ArrowDown) fw -= 1;
+  if(kk.KeyA || kk.ArrowLeft) mx -= 1;
+  if(kk.KeyD || kk.ArrowRight) mx += 1;
+  mx += jv.x; fw -= jv.y;
+  var l = Math.hypot(mx, fw);
+  if(l > 0.01){
+    mx /= Math.max(1, l); fw /= Math.max(1, l);
+    var sy = Math.sin(walk.yaw), cy = Math.cos(walk.yaw);
+    var nx = walk.pos.x + (mx*cy - fw*sy) * sp * dt;
+    var nz = walk.pos.z + (-mx*sy - fw*cy) * sp * dt;
+    nx = Math.max(-85, Math.min(85, nx));
+    nz = Math.max(-80, Math.min(75, nz));
+    var cand = [[nx, nz], [nx, walk.pos.z], [walk.pos.x, nz]];   /* an Waenden entlanggleiten */
+    for(var ci=0; ci<3; ci++){
+      var cx = cand[ci][0], cz = cand[ci][1], lv = levelAt(cx, cz);
+      if(!blocked(cx, cz, lv)){ walk.pos.x = cx; walk.pos.z = cz; walkLevel = lv; break; }
+    }
+  }
+  var fy = onStair(walk.pos.x, walk.pos.z) ? stairY(walk.pos.z)
+         : (walkLevel === 1 ? OGY : ((insideCafe(walk.pos.x, walk.pos.z) || insideRest(walk.pos.x, walk.pos.z)) ? EG : 0));
+  walk.pos.y += (fy + 1.65 - walk.pos.y) * Math.min(1, dt*10);
+}
+
+var px=0, py=0, dragging=false, pinchD=0, panning=false;
+canvas.addEventListener("pointerdown", function(e){
+  dragging = true; px = e.clientX; py = e.clientY;
+  panning = e.shiftKey || e.button === 2;
+  canvas.setPointerCapture(e.pointerId);
+});
+canvas.addEventListener("pointermove", function(e){
+  if(!dragging) return;
+  var dx = e.clientX - px, dy = e.clientY - py;
+  px = e.clientX; py = e.clientY;
+  if(mode === "orbit"){
+    if(panning){
+      var s = sph.r * .0012;
+      var fwd = new THREE.Vector3(Math.sin(sph.th), 0, Math.cos(sph.th));
+      var right = new THREE.Vector3(fwd.z, 0, -fwd.x);
+      target.addScaledVector(right, dx*s);
+      target.addScaledVector(fwd, dy*s);
+    } else {
+      sph.th -= dx * .0052;
+      sph.ph -= dy * .0052;
+    }
+  } else {
+    walk.yaw -= dx * .0038;
+    walk.pitch -= dy * .0038;
+  }
+});
+window.addEventListener("pointerup", function(){ dragging = false; panning = false; });
+canvas.addEventListener("contextmenu", function(e){ e.preventDefault(); });
+canvas.addEventListener("wheel", function(e){
+  e.preventDefault();
+  if(mode === "orbit"){ sph.r *= (1 + Math.sign(e.deltaY)*.09); }
+}, {passive:false});
+canvas.addEventListener("touchstart", function(e){
+  if(e.touches.length === 2){
+    pinchD = Math.hypot(e.touches[0].clientX-e.touches[1].clientX,
+                        e.touches[0].clientY-e.touches[1].clientY);
+  }
+}, {passive:true});
+canvas.addEventListener("touchmove", function(e){
+  if(e.touches.length === 2 && mode === "orbit"){
+    var d = Math.hypot(e.touches[0].clientX-e.touches[1].clientX,
+                       e.touches[0].clientY-e.touches[1].clientY);
+    sph.r *= pinchD/d; pinchD = d; dragging = false;
+  }
+}, {passive:true});
+window.addEventListener("keydown", function(e){ keys[e.code] = true; });
+window.addEventListener("keyup", function(e){ keys[e.code] = false; });
+
+var joy = document.getElementById("joy"), knob = document.getElementById("knob"), joyId = null;
+joy.addEventListener("pointerdown", function(e){ joyId = e.pointerId; joy.setPointerCapture(joyId); moveKnob(e); });
+joy.addEventListener("pointermove", function(e){ if(e.pointerId === joyId) moveKnob(e); });
+joy.addEventListener("pointerup", function(){ joyId = null; joyVec.x = 0; joyVec.y = 0; knob.style.left = "35px"; knob.style.top = "35px"; });
+function moveKnob(e){
+  var r = joy.getBoundingClientRect();
+  var dx = e.clientX - (r.left + 55), dy = e.clientY - (r.top + 55);
+  var len = Math.hypot(dx, dy), max = 38;
+  if(len > max){ dx *= max/len; dy *= max/len; }
+  knob.style.left = (35 + dx) + "px"; knob.style.top = (35 + dy) + "px";
+  joyVec.x = dx / max; joyVec.y = dy / max;
+}
+
+var bWalk = document.getElementById("bWalk");
+var help = document.getElementById("help");
+function setMode(m){
+  mode = m;
+  joy.style.display = (m === "walk" && "ontouchstart" in window) ? "block" : "none";
+  help.textContent = m === "orbit"
+    ? "Ziehen: drehen · Scrollen/Pinch: zoomen · Shift+Ziehen: verschieben"
+    : "WASD / Pfeile oder Joystick: gehen · Ziehen: umsehen · Shift: schneller · Restaurant und Espresso House sind begehbar";
+  if(m === "walk"){ walk.pos.set(2, 1.65, -21.5); walk.yaw = Math.PI - .12; walk.pitch = -.03; walkLevel = 0; }
+}
+bWalk.onclick = function(){ setMode("walk"); setActive("walk"); showPlan(false); };
+var labelsOn = true;
+document.getElementById("bLabels").onclick = function(){
+  labelsOn = !labelsOn;
+  this.classList.toggle("on", labelsOn);
+};
+var info = document.getElementById("info");
+document.getElementById("bInfo").onclick = function(){
+  info.style.display = info.style.display === "block" ? "none" : "block";
+};
+document.getElementById("infoClose").onclick = function(){ info.style.display = "none"; };
+
+window.addEventListener("resize", function(){
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+/* ================= Ansichten, Massplan, Wege, Grenze, Tageslicht (Bedienleiste oben rechts) ================= */
+/* Flaechen je Einheit, aus der Modellgeometrie berechnet (Raster 2 cm), in m2 */
+var AREA = {
+  lot:1960.9, rest:252.0, cafe:156.0, erker:3.9, drive:146.6, spur2:54.5, aisle:305.3, exit:80.4,
+  park:113.5, epark:134.7, bike:25.6, walk:262.7, sealed:1535.2, green:425.7, bld:411.9, gf:567.9
+};
+function de(n, d){
+  var s = n.toFixed(d || 0).split(".");
+  s[0] = s[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  return s.join(",");
+}
+function m2(v){ return de(v, v < 10 ? 1 : 0) + " m²"; }
+var ROWS = [
+  ["h", "Gebäude"],
+  ["Restaurant Flat Iron, 18,00 × 14,00 m", AREA.rest],
+  ["Espresso House je Geschoss, 12,00 × 13,00 m", AREA.cafe],
+  ["Drive-in-Ausgabeerker, 2,50 × 1,55 m", AREA.erker],
+  ["h", "Verkehrsflächen"],
+  ["Drive-in-Spur mit Bogen und Ausgabe", AREA.drive],
+  ["Vorbeifahrspur zum Parkplatz", AREA.spur2],
+  ["Fahrgasse hinten, 6,00 m breit", AREA.aisle],
+  ["Ausfahrt Ost", AREA.exit],
+  ["11 Stellplätze, je 2,40 × 5,00 m", AREA.park],
+  ["12 E-Ladeplätze (6 + 6)", AREA.epark],
+  ["h", "Wege"],
+  ["Gehwege, Plätze, Terrasse, Überweg-Fußweg", AREA.walk],
+  ["Fahrradstellplätze", AREA.bike],
+  ["h", "Bilanz"],
+  ["Gebäudegrundfläche (GRZ " + de(AREA.bld/AREA.lot, 2) + ")", AREA.bld],
+  ["Versiegelt gesamt (max. 1.568,8 m²)", AREA.sealed],
+  ["Grünfläche (Minimum 392 m²)", AREA.green],
+  ["Geschossfläche (GFZ " + de(AREA.gf/AREA.lot, 2) + ", max. 2,4)", AREA.gf],
+  ["Grundstück", AREA.lot]
+];
+
+/* Lageplan als SVG, gleiche Koordinaten wie das 3D-Modell (Strasse unten, Cafe rechts wie in der Strassenansicht) */
+function planSVG(withTable){
+  var S = 12, X0 = 38, Z0 = 24.5, W = 65*S, H = 56*S, TW = withTable ? 380 : 0, o = [];
+  function px(x){ return ((X0 - x)*S).toFixed(1); }
+  function pz(z){ return ((Z0 - z)*S).toFixed(1); }
+  function R(x1, x2, z1, z2, fill, extra){
+    o.push('<rect x="' + px(x2) + '" y="' + pz(z2) + '" width="' + ((x2 - x1)*S).toFixed(1) + '" height="' + ((z2 - z1)*S).toFixed(1) + '" fill="' + fill + '"' + (extra || "") + '/>');
+  }
+  function Pg(pts, fill, extra){
+    o.push('<polygon points="' + pts.map(function(p){ return px(p[0]) + "," + pz(p[1]); }).join(" ") + '" fill="' + fill + '"' + (extra || "") + '/>');
+  }
+  function L(x1, z1, x2, z2, st, w){
+    o.push('<line x1="' + px(x1) + '" y1="' + pz(z1) + '" x2="' + px(x2) + '" y2="' + pz(z2) + '" stroke="' + st + '" stroke-width="' + (w || 1) + '"/>');
+  }
+  function T(x, z, txt, size, fill, weight, rot){
+    var X = px(x), Y = pz(z);
+    o.push('<text x="' + X + '" y="' + Y + '" font-size="' + size + '" fill="' + (fill || "#23333a") + '" font-weight="' + (weight || 400) +
+      '" text-anchor="middle" dominant-baseline="middle"' + (rot ? ' transform="rotate(' + rot + ' ' + X + ' ' + Y + ')"' : "") + '>' + txt + '</text>');
+  }
+  function arcPts(cx, cz, r, t0, t1, n, sx){
+    var a = []; for(var i=0; i<=n; i++){ var t = t0 + (t1 - t0)*i/n; a.push([cx + (sx || -1)*r*Math.cos(t), cz + r*Math.sin(t)]); } return a;
+  }
+  function arrow(x, z, dx, dz, col){
+    Pg([[x + dx*.9, z + dz*.9], [x - dx*.5 - dz*.55, z - dz*.5 + dx*.55], [x - dx*.5 + dz*.55, z - dz*.5 - dx*.55]], col);
+  }
+  function dimH(x1, x2, z, txt, col){
+    col = col || "#4d5f66";
+    L(x1, z, x2, z, col, .9); L(x1, z - .45, x1, z + .45, col, .9); L(x2, z - .45, x2, z + .45, col, .9);
+    T((x1 + x2)/2, z + .62, txt, 10.5, col, 600);
+  }
+  function dimV(z1, z2, x, txt, col){
+    col = col || "#4d5f66";
+    L(x, z1, x, z2, col, .9); L(x - .45, z1, x + .45, z1, col, .9); L(x - .45, z2, x + .45, z2, col, .9);
+    T(x + .62, (z1 + z2)/2, txt, 10.5, col, 600, -90);
+  }
+  var amber = "#efc77c", gray = "#bcc0c2", walkC = "#e6e1d5", eC = "#c3e3c8", bikeC = "#bcd8ea";
+  o.push('<defs><pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">' +
+         '<rect width="7" height="7" fill="#c9cdcf"/><rect width="3" height="7" fill="#ffffff"/></pattern></defs>');
+  o.push('<rect width="' + (W + TW) + '" height="' + H + '" fill="#f4f1ea"/>');
+  /* Strassen und oeffentliche Gehwege */
+  R(-27, 38, -30.5, -21.5, "#cbcbc7"); R(-27, 38, -21.5, -18.9, "#dfdcd4");
+  R(29, 38, -21.5, 24.5, "#cbcbc7"); R(27.3, 29, -18.9, 24.5, "#dfdcd4");
+  T(4, -26, "FRIEDRICH-EBERT-DAMM", 13, "#5b6669", 700); T(33.5, 2, "BERNER HEERWEG", 13, "#5b6669", 700, -90);
+  /* Grundstueck */
+  R(-23.25, 25.25, -18.9, 21.53, "#d3e3c4");
+  /* Fahrgasse, Vorbeifahrspur, Parken */
+  Pg([[-22.75, -.75], [-19.75, -.75]].concat(arcPts(-12.75, -.75, 7, 0, Math.PI/2, 24))
+    .concat([[-12.75, 5.75], [21.45, 5.75], [21.45, 4.05], [24.95, 4.05]])
+    .concat(arcPts(19.75, 6.55, 5.2, 0, Math.PI/2, 16, 1)).concat([[-22.75, 11.75]]), gray);
+  R(-22.75, -19.75, -21.5, -.75, gray);
+  R(-22.75, 3.65, 11.75, 16.05, gray); R(6.65, 21.05, 11.75, 16.05, eC); R(6.65, 21.475, 1, 6, eC);
+  for(var i=0; i<12; i++){ L(-22.75 + i*2.4, 11.75, -22.75 + i*2.4, 16.05, "#ffffff", 1.3); }
+  for(var j=0; j<7; j++){ L(6.65 + j*2.4, 11.75, 6.65 + j*2.4, 16.05, "#ffffff", 1.3); }
+  L(-22.75, 11.75, 3.65, 11.75, "#ffffff", 1.3); L(6.65, 11.75, 21.05, 11.75, "#ffffff", 1.3);
+  L(-22.75, 16.0, 3.65, 16.0, "#9aa0a3", 1.6); L(6.65, 16.0, 21.05, 16.0, "#9aa0a3", 1.6);
+  for(var s=0; s<7; s++){ L(6.65 + s*2.45, 1, 6.65 + s*2.45, 6, "#ffffff", 1.3); }
+  L(6.65, 6, 21.35, 6, "#ffffff", 1.3);
+  for(var c1=0; c1<6; c1++){ R(7.625 + c1*2.45, 8.125 + c1*2.45, .32, .68, "#2e9c58"); }
+  for(var c2=0; c2<6; c2++){ R(7.6 + c2*2.4, 8.1 + c2*2.4, 16.83, 17.17, "#2e9c58"); }
+  /* Drive-in-Spur, Bogen, Ausgabespur, Ausfahrt */
+  R(-19.75, -16.25, -21.5, -.75, amber);
+  Pg(arcPts(-12.75, -.75, 7, 0, Math.PI/2, 24).concat(arcPts(-12.75, -.75, 3.5, Math.PI/2, 0, 24)), amber);
+  R(-12.75, 2.75, 2.75, 6.25, amber); R(21.45, 24.95, -21.5, 4.05, amber);
+  arrow(-18, -14, 0, 1, "#a0761f"); arrow(-18, -5, 0, 1, "#a0761f");
+  arrow(-12.0, 4.5, 1, 0, "#a0761f"); arrow(-2.6, 4.5, 1, 0, "#a0761f"); arrow(-21.25, -14, 0, 1, "#7d878b");
+  arrow(-8, 7.5, 1, 0, "#7d878b"); arrow(10, 7.5, 1, 0, "#7d878b"); arrow(23.2, -6, 0, -1, "#a0761f"); arrow(23.2, -15, 0, -1, "#a0761f");
+  /* Wege, Plaetze, Fahrraeder, Zebrastreifen */
+  R(3, 21, -18.9, -16, walkC); R(-14, -2, -14, -12, walkC); R(-9.1, -6.9, -18.9, -14, walkC); R(3, 21, -2, 0, walkC);
+  R(2.75, 6.65, 0, 1, walkC); R(3.65, 6.65, 1, 17.75, walkC); R(2.8, 3.6, 1.3, 5.6, "#9cc28a");
+  Pg([[-2, -18.9], [3, -18.9], [3, 1], [2.75, 1], [2.75, 2.75], [-2, 2.75]], walkC);
+  R(2.65, 7.65, 17.75, 21.25, bikeC); R(-14, -9.5, -14.9, -13.1, bikeC);
+  for(var zs=6.5; zs<11.6; zs+=1){ R(3.65, 6.65, zs - .25, zs + .25, "#ffffff"); }
+  L(-12.75, 6.25, -3.5, 6.25, "#ffffff", 1.3);
+  Pg([[-3.5, 2.75], [2.75, 2.75], [2.75, 5.75], [3.65, 5.75], [3.65, 6.95]], "url(#hatch)", ' stroke="#ffffff" stroke-width="1.4"');
+  /* Gebaeude */
+  R(3, 21, -16, -2, "#86594a"); R(-14, -2, -12, 1, "#465663"); R(-9.25, -6.75, 1, 2.55, "#465663");
+  L(10.5, -16, 13.5, -16, "#f2d29a", 3.5); L(-9.5, -12, -6.5, -12, "#f2d29a", 3.5);
+  R(-23.25, 25.25, -18.9, 21.53, "none", ' stroke="#c9952a" stroke-width="2.6"');
+  /* Beschriftung der Einheiten */
+  T(12, -8.0, "FLAT IRON", 16, "#ffffff", 700); T(12, -9.6, m2(AREA.rest) + " · 1 Geschoss", 11, "#f3e7dc");
+  T(12, -10.9, "Bar · Küche mit Ausgabetheke", 10, "#e9d6c8");
+  T(-8, -4.2, "ESPRESSO HOUSE", 13.5, "#ffffff", 700); T(-8, -5.8, m2(AREA.cafe) + " je Geschoss", 10.5, "#e2eaef");
+  T(-8, -7.1, "EG Bestellen · OG Lounge", 10, "#d3dee5"); T(-8, 1.75, "Ausgabe", 6.5, "#ffffff", 600);
+  T(-18, -9.5, "Drive-in · " + m2(AREA.drive), 10.5, "#5c4410", 700, -90);
+  T(-21.25, -9.5, "Vorbeifahrt · " + m2(AREA.spur2), 10, "#3f4a4f", 600, -90);
+  T(23.2, -10.5, "Ausfahrt · " + m2(AREA.exit), 10, "#5c4410", 600, -90);
+  T(-7.3, 4.5, "Ausgabespur", 9.5, "#5c4410", 600);
+  T(-12, 9.0, "Fahrgasse 6 m · " + m2(AREA.aisle), 10.5, "#3f4a4f", 600);
+  T(-9.55, 13.9, "11 Stellplätze · " + m2(AREA.park), 11, "#2f3a3e", 700);
+  T(13.85, 13.9, "6 E-Plätze", 10, "#1f6b3a", 700);
+  T(14.0, 3.5, "6 E-Plätze · zusammen 12 E · " + m2(AREA.epark), 10, "#1f6b3a", 700);
+  T(12, -1, "Weg zu den Ladesäulen", 9.5, "#6b6458", 600); T(14.5, -17.45, "Vorplatz und Terrasse", 10, "#6b6458", 600);
+  T(5.15, 3.5, "Platz", 9, "#6b6458", 600); T(7.4, 8.9, "Überweg 3 m", 9, "#6b6458", 600, -90);
+  T(.5, -9.5, "Durchgang", 10, "#6b6458", 600, -90); T(5.15, 19.5, "Fahrräder", 10, "#24506e", 600);
+  T(-11.75, -14, "Räder", 8.5, "#24506e", 600); T(-4.6, -16.3, "Grün", 10, "#4d6b3c", 600);
+  T(-10, 19.0, "Grünfläche · gesamt " + m2(AREA.green), 11, "#4d6b3c", 700);
+  /* Masse */
+  dimH(-23.25, 25.25, 23.0, "48,50 m"); dimV(-18.9, 21.53, -25.0, "40,43 m");
+  dimH(3, 21, -15.0, "18,00 m", "#f6ece2"); dimV(-16, -2, 19.9, "14,00 m", "#f6ece2");
+  dimH(-14, -2, -13.0, "12,00 m"); dimV(-12, 1, -15.25, "13,00 m");
+  dimV(-18.9, -16, 4.4, "2,90 m"); dimV(-18.9, -12, -3.3, "6,90 m"); dimH(-2, 3, -6.2, "5,00 m");
+  dimH(-19.75, -16.25, -20.2, "3,50 m"); dimH(-22.75, -19.75, -20.2, "3,00 m"); dimH(21.45, 24.95, -20.2, "3,50 m");
+  dimH(-22.75, -20.35, 17.4, "2,40 m"); dimV(11.75, 16.75, -24.1, "5,00 m"); dimV(5.75, 11.75, 18.4, "6,00 m");
+  /* Nordpfeil (Norden liegt jenseits des Friedrich-Ebert-Damms) */
+  Pg([[-25.2, -29.6], [-24.4, -27.2], [-26.0, -27.2]], "#33454c"); T(-25.2, -26.2, "N", 12, "#33454c", 700);
+  o.push('<text x="12" y="' + (H - 12) + '" font-size="11" fill="#5b6669">Lageplan Drive &amp; Dine · Flurstück 4893 · Maße in m · Flächen aus dem 3D-Modell berechnet</text>');
+  if(withTable){
+    var tx = W + 24, ty = 40;
+    o.push('<text x="' + tx + '" y="' + ty + '" font-size="16" font-weight="700" fill="#23333a">Flächen je Einheit</text>');
+    ty += 26;
+    ROWS.forEach(function(r){
+      if(r[0] === "h"){ ty += 8; o.push('<text x="' + tx + '" y="' + ty + '" font-size="10.5" font-weight="700" fill="#8a6a2a" letter-spacing="1">' + r[1].toUpperCase() + '</text>'); ty += 18; return; }
+      o.push('<text x="' + tx + '" y="' + ty + '" font-size="11.5" fill="#2b3a40">' + r[0] + '</text>');
+      o.push('<text x="' + (W + TW - 20) + '" y="' + ty + '" font-size="11.5" font-weight="700" fill="#2b3a40" text-anchor="end">' + m2(r[1]) + '</text>');
+      o.push('<line x1="' + tx + '" y1="' + (ty + 6) + '" x2="' + (W + TW - 20) + '" y2="' + (ty + 6) + '" stroke="#d8d2c4" stroke-width="1"/>');
+      ty += 21;
+    });
+  }
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + (W + TW) + ' ' + H + '" font-family="Avenir Next, Segoe UI, Arial, sans-serif">' + o.join("") + '</svg>';
+}
+(function(){
+  document.getElementById("planSvg").innerHTML = planSVG(false);
+  var t = '<table>';
+  ROWS.forEach(function(r){
+    if(r[0] === "h"){ t += '<tr class="h"><td colspan="2">' + r[1].toUpperCase() + '</td></tr>'; return; }
+    t += '<tr><td>' + r[0] + '</td><td class="v">' + m2(r[1]) + '</td></tr>';
+  });
+  t += '</table><div class="meter"><i style="width:' + (AREA.sealed/1568.8*100).toFixed(1) + '%"></i></div>' +
+       '<div class="mnote">Versiegelt ' + m2(AREA.sealed) + ' von max. 1.568,8 m² · Reserve ' + m2(1568.8 - AREA.sealed) + '</div>';
+  document.getElementById("planTab").innerHTML = t;
+  document.getElementById("planDl").href = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(planSVG(true));
+})();
+
+/* Wege: Fahrweg Drive-in (gelb), Weg zum Parkplatz (blau), Fusswege (gruen), mit Richtungspfeilen */
+var waysGroup = new THREE.Group(); waysGroup.visible = false; scene.add(waysGroup);
+(function(){
+  function tube(curve, col, rad, segs){
+    var m = new THREE.Mesh(new THREE.TubeGeometry(curve, segs, rad, 6, false),
+      new THREE.MeshBasicMaterial({color:col}));
+    waysGroup.add(m);
+  }
+  function arrows(curve, col, every){
+    var n = Math.floor(curve.getLength()/every), mat = new THREE.MeshBasicMaterial({color:col}), up = new THREE.Vector3(0, 1, 0);
+    for(var i=1; i<n; i++){
+      var t = i/n, c = new THREE.Mesh(new THREE.ConeGeometry(.75, 1.7, 12), mat);
+      c.position.copy(curve.getPointAt(t)); c.quaternion.setFromUnitVectors(up, curve.getTangentAt(t)); waysGroup.add(c);
+    }
+  }
+  function poly(pts, y){
+    var cp = new THREE.CurvePath();
+    for(var i=1; i<pts.length; i++){
+      cp.add(new THREE.LineCurve3(new THREE.Vector3(pts[i-1][0], y, pts[i-1][1]), new THREE.Vector3(pts[i][0], y, pts[i][1])));
+    }
+    return cp;
+  }
+  var drive = new THREE.CatmullRomCurve3(lanePath.points.map(function(v){ return new THREE.Vector3(v.x, .5, v.z); }));
+  tube(drive, 0xffa21f, .3, 500); arrows(drive, 0xffa21f, 7);
+  var park = new THREE.CatmullRomCurve3([[-21.25, -23], [-21.25, -12], [-21.25, -2], [-20.6, 4.2], [-18, 7.5], [-8, 7.5], [4, 7.5],
+    [17, 7.5], [20.4, 7.2], [22.3, 5.6], [23.8, 3], [23.8, -4], [23.8, -14], [23.8, -24]].map(function(p){ return new THREE.Vector3(p[0], .5, p[1]); }));
+  tube(park, 0x3d9be9, .26, 400); arrows(park, 0x3d9be9, 7);
+  [[[12, -20.2], [12, -16.4]], [[-8, -20.2], [-8, -12.4]], [[.5, -20.2], [.5, .5], [5.15, .5], [5.15, 11.75], [5.15, 18.2]], [[3, -1], [20.5, -1]]]
+    .forEach(function(pp){ tube(poly(pp, .4), 0x52d16a, .2, 160); });
+})();
+
+/* Grenze des Flurstuecks (auf Wunsch einblendbar) */
+var boundGroup = new THREE.Group(); boundGroup.visible = false; scene.add(boundGroup);
+(function(){
+  var m = new THREE.MeshBasicMaterial({color:0xe8b45a}), x1 = -23.25, x2 = 25.25, z1 = -18.9, z2 = 21.53, w = .22;
+  [[(x1 + x2)/2, z1, x2 - x1 + w, w], [(x1 + x2)/2, z2, x2 - x1 + w, w], [x1, (z1 + z2)/2, w, z2 - z1], [x2, (z1 + z2)/2, w, z2 - z1]].forEach(function(b){
+    var e = new THREE.Mesh(new THREE.BoxGeometry(b[2], .06, b[3]), m); e.position.set(b[0], .22, b[1]); boundGroup.add(e);
+  });
+  [[x1, z1], [x2, z1], [x1, z2], [x2, z2]].forEach(function(p){
+    var c = new THREE.Mesh(new THREE.CylinderGeometry(.12, .12, 1.2, 10), m); c.position.set(p[0], .6, p[1]); boundGroup.add(c);
+  });
+})();
+
+/* Tageslicht / Abendlicht */
+var skyDay = (function(){
+  var cv = document.createElement("canvas"); cv.width = 16; cv.height = 512;
+  var ctx = cv.getContext("2d"), gr = ctx.createLinearGradient(0, 0, 0, 512);
+  gr.addColorStop(0, "#2f6fd0"); gr.addColorStop(.5, "#5e9ce6"); gr.addColorStop(.72, "#a9cdf2");
+  gr.addColorStop(.8, "#c9dcea"); gr.addColorStop(1, "#8e9ba3");
+  ctx.fillStyle = gr; ctx.fillRect(0, 0, 16, 512);
+  var t = new THREE.CanvasTexture(cv); t.encoding = THREE.sRGBEncoding; return t;
+})();
+var skyNightMat = skyMesh.material;
+var skyDayMat = new THREE.MeshBasicMaterial({map:skyDay, side:THREE.BackSide, fog:false, toneMapped:false});
+/* Tageslicht: aussen (Boden, Strassen, Fassaden, Baeume) farbrichtiger gerechnet, damit nichts milchig wirkt;
+   die Einrichtung innen bleibt fast wie am Abend. Beim Zurueckschalten wird der Abendzustand exakt wiederhergestellt */
+var DAY_BOX = [[-14.3, -1.7, -12.3, 2.6], [2.7, 21.3, -16.3, -1.7]];   /* Grundrisse Cafe (mit Erker) und Restaurant */
+var DAY_TEX = [texGrass, texAsphalt, texLane, texPaver, texConcrete, texBrick, texGreenRoof, texLeaf, texBark];
+var dayMats = null;
+function collectDayMats(){
+  var ext = new Set(), all = new Set(), wp = new THREE.Vector3();
+  scene.traverse(function(o){
+    if(!o.material || o.isSprite || o === skyMesh) return;
+    o.getWorldPosition(wp);
+    var inside = DAY_BOX.some(function(b){ return wp.x > b[0] && wp.x < b[1] && wp.z > b[2] && wp.z < b[3] && wp.y < 8.2; });
+    [].concat(o.material).forEach(function(m){ all.add(m); if(!inside) ext.add(m); });
+  });
+  dayMats = [];
+  all.forEach(function(m){
+    var d = {m:m};
+    if(m.color){
+      var f = ext.has(m) ? .4 : .12;
+      d.c0 = m.color.getHex();
+      d.c1 = m.color.clone().lerp(m.color.clone().convertSRGBToLinear(), f).getHex();
+    }
+    dayMats.push(d);
+  });
+}
+function dayColors(on){
+  if(!dayMats) collectDayMats();
+  dayMats.forEach(function(d){ if(d.c0 !== undefined) d.m.color.setHex(on ? d.c1 : d.c0); d.m.needsUpdate = true; });
+  DAY_TEX.forEach(function(t){ t.encoding = on ? THREE.sRGBEncoding : THREE.LinearEncoding; });
+  M.grass.color.set(on ? 0xcad8be : 0xffffff);
+}
+var dayOn = false;
+function setDay(on){
+  dayOn = on;
+  dayColors(on);
+  hemi.color.set(on ? 0xc4dbff : 0x35486e); hemi.groundColor.set(on ? 0x5a5236 : 0x141a12); hemi.intensity = on ? .85 : .5;
+  sun.color.set(on ? 0xfff1da : 0x9db4de); sun.intensity = on ? 2.3 : .4;
+  amb.color.set(on ? 0xffffff : 0x223050); amb.intensity = on ? .1 : .35;
+  lamps.forEach(function(o){ o.l.intensity = o.i*(on ? .3 : 1); });
+  skyMesh.material = on ? skyDayMat : skyNightMat;
+  scene.fog.color.set(on ? 0xb4d0ee : 0x232c4c); scene.background.set(on ? 0x9fc3ea : 0x1a2340);
+  renderer.toneMappingExposure = on ? 1.05 : 1.15;
+  var b = document.getElementById("bLight"); b.textContent = on ? "Abendlicht" : "Tageslicht";
+}
+
+/* Kamerafahrten zu festen Ansichten */
+var VIEWS = {
+  persp:   {tx:0,  ty:3.5, tz:-7,  r:42,  th:2.85, ph:1.40, cap:"Perspektive vom Friedrich-Ebert-Damm"},
+  aerial:  {tx:1,  ty:0,   tz:1.3, r:80,  th:2.9,  ph:.42,  cap:"Vogelperspektive auf Grundstück und Parken"},
+  access:  {tx:-11,ty:1,   tz:-3,  r:50,  th:-1.2, ph:1.0,  cap:"Zufahrt und Drive-in"},
+  context: {tx:2,  ty:0,   tz:0,   r:140, th:2.7,  ph:.85,  cap:"Umgebung"}
+};
+var viewBtns = {persp:"vPersp", aerial:"vAerial", access:"vAccess", context:"vContext", walk:"bWalk", inside:"bInside"};
+function setActive(v){
+  Object.keys(viewBtns).forEach(function(k){ document.getElementById(viewBtns[k]).classList.toggle("on", k === v); });
+}
+var camAnim = null;
+function goView(v){
+  var P = VIEWS[v];
+  setMode("orbit"); showPlan(false);
+  var d = P.th - sph.th; d = Math.atan2(Math.sin(d), Math.cos(d));
+  camAnim = {t:0, f:{tx:target.x, ty:target.y, tz:target.z, r:sph.r, th:sph.th, ph:sph.ph}, p:P, dth:d};
+  setActive(v);
+  help.textContent = P.cap + " · Ziehen: drehen · Scrollen/Pinch: zoomen · Shift+Ziehen: verschieben";
+}
+function stepCam(dt){
+  if(!camAnim || mode !== "orbit") return;
+  camAnim.t = Math.min(1, camAnim.t + dt/1.2);
+  var t = camAnim.t, e = t < .5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2)/2, f = camAnim.f, p = camAnim.p;
+  target.set(f.tx + (p.tx - f.tx)*e, f.ty + (p.ty - f.ty)*e, f.tz + (p.tz - f.tz)*e);
+  sph.r = f.r + (p.r - f.r)*e; sph.th = f.th + camAnim.dth*e; sph.ph = f.ph + (p.ph - f.ph)*e;
+  if(t >= 1) camAnim = null;
+}
+canvas.addEventListener("pointerdown", function(){ camAnim = null; });
+canvas.addEventListener("wheel", function(){ camAnim = null; }, {passive:true});
+
+/* Innenraeume nacheinander: Restaurant, Cafe EG, Cafe OG */
+var rooms = [
+  {name:"Flat Iron · Restaurant", x:12, z:-14.4, yaw:Math.PI, lvl:0},
+  {name:"Espresso House · Erdgeschoss", x:-8, z:-10.8, yaw:Math.PI, lvl:0},
+  {name:"Espresso House · Lounge im OG", x:-8.2, z:-4.0, yaw:0, lvl:1}
+], roomIdx = 0;
+function goRoom(){
+  var r = rooms[roomIdx % rooms.length]; roomIdx++;
+  setMode("walk"); showPlan(false);
+  walk.pos.set(r.x, (r.lvl ? OGY : EG) + 1.65, r.z); walk.yaw = r.yaw; walk.pitch = -.05; walkLevel = r.lvl;
+  setActive("inside");
+  help.textContent = r.name + " · WASD / Joystick: gehen · Ziehen: umsehen · Innenräume: nächster Raum";
+}
+
+/* Massplan-Fenster */
+var planEl = document.getElementById("plan");
+function showPlan(on){
+  planEl.style.display = on ? "block" : "none";
+  document.getElementById("bPlan").classList.toggle("on", on);
+}
+document.getElementById("bPlan").onclick = function(){ showPlan(planEl.style.display !== "block"); };
+document.getElementById("planClose").onclick = function(){ showPlan(false); };
+
+document.getElementById("vPersp").onclick = function(){ goView("persp"); };
+document.getElementById("vAerial").onclick = function(){ goView("aerial"); };
+document.getElementById("vAccess").onclick = function(){ goView("access"); };
+document.getElementById("vContext").onclick = function(){ goView("context"); };
+document.getElementById("bInside").onclick = goRoom;
+document.getElementById("bBound").onclick = function(){ boundGroup.visible = !boundGroup.visible; this.classList.toggle("on", boundGroup.visible); };
+document.getElementById("bWays").onclick = function(){ waysGroup.visible = !waysGroup.visible; this.classList.toggle("on", waysGroup.visible); };
+document.getElementById("bLight").onclick = function(){ setDay(!dayOn); this.classList.toggle("on", dayOn); };
+
+/* ================= Loop ================= */
+var clock = new THREE.Clock();
+var laneS = 0, holdT = 0, stopIdx = 0;
+function animate(){
+  requestAnimationFrame(animate);
+  var dt = Math.min(clock.getDelta(), .05);
+
+  if(holdT > 0){ holdT -= dt; }
+  else{
+    laneS += dt * .022;
+    if(stopIdx < laneStops.length && laneS >= laneStops[stopIdx].t){
+      laneS = laneStops[stopIdx].t; holdT = laneStops[stopIdx].d; stopIdx++;
+    }
+    if(laneS >= 1){ laneS = 0; stopIdx = 0; }
+  }
+  brakeL.visible = brakeR.visible = holdT > 0;
+  var p = lanePath.getPointAt(laneS), tan = lanePath.getTangentAt(laneS);
+  driveCar.position.set(p.x, 0, p.z);
+  driveCar.rotation.y = Math.atan2(-tan.z, tan.x);
+
+  /* Schiebefenster am Drive-in: oeffnet, solange das Auto an der Ausgabe haelt */
+  var atWin = stopIdx === 2 && holdT > .4;
+  winSlide.open = Math.max(0, Math.min(1, winSlide.open + (atWin ? 1 : -1)*dt*1.8));
+  winSlide.position.x = -8.32 + winSlide.open*.6;
+  /* Serviceroboter */
+  robots.forEach(function(r){ r.update(dt); });
+  /* automatische Schiebetueren: oeffnen, wenn man im Rundgang davorsteht */
+  [cafeDoor, restDoor].forEach(function(d){
+    var near = mode === "walk" && walkLevel === 0 && Math.abs(walk.pos.x - d.x) < 2.2 && Math.abs(walk.pos.z - d.z) < 3.2;
+    d.open = Math.max(0, Math.min(1, d.open + (near ? 1 : -1)*dt*1.6));
+    d.d1.position.x = d.x - .68 - d.open*1.3; d.d2.position.x = d.x + .68 + d.open*1.3;
+  });
+  /* Beschriftungen im Inneren ausblenden, damit sie nicht durch die Decke scheinen */
+  var showL = labelsOn && !(mode === "walk" && (insideCafe(walk.pos.x, walk.pos.z) || insideRest(walk.pos.x, walk.pos.z)));
+  if(labels[0].visible !== showL){ labels.forEach(function(lb){ lb.visible = showL; }); }
+
+  if(mode === "walk"){
+    walkStep(dt, keys, joyVec);
+    applyWalk();
+    scene.fog.near = 120; scene.fog.far = 360;
+  } else {
+    stepCam(dt);
+    applyOrbit();
+    scene.fog.near = Math.max(120, sph.r*1.15); scene.fog.far = scene.fog.near + 300;
+  }
+  renderer.render(scene, camera);
+}
+setMode("orbit");
+animate();
+})();
+</script>
+</body>
+</html>
